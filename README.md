@@ -121,9 +121,7 @@ content-location: http://61.250.21.212:9000/ThingPlug/remoteCSE-000.0000.00000.0
 - 필수정보 입력화면에 내용을 해당 내용을 넣어준 후 하단 '저장'버튼을 누르면 ThingPlug에 Device 등록이 완료됩니다. 
 
 ## Application 실행
-`node application.js` 명령어로 application을 실행합니다.
-
-> TODO : MQTT 연결 및 Application에서의 확인 방법에 대해 코드정리 후 해당 내용 반영
+`node application.js` 명령어로 application을 실행합니다. (Application 실행하기 전에 `device.js`가 동작하는 상태로 유지합니다. 따라서 `device.js` 실행을 종료하지 않고 새로운 terminal(커맨드창)을 열어 실행하세요. 계속 실행이 유지되는 `device.js`와 달리 본 스타트업킷에서는 편의상 `application.js`는 한번 실행후 종료하도록 되어있습니다.)
 
 ```ShellSession
 ≫ node application.js 
@@ -135,6 +133,19 @@ resouceId : CI00000000000000034932
 content-location: http://61.250.21.212:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000/mgmtCmd-mgmtCmd_1/execInstance-EI00000000000000000517
 resouceId : EI00000000000000000517
 execStatus : 2
+```
+
+실행 후 `device.js`가 실행중인 터미널을 살펴보면 application이 보낸 mgmtCmd에 대한 아래와 같은 MQTT 로그가 보일 것입니다.
+
+```
+#####################################
+MQTT 수신 mgmtCmd Name : mgmtCmd_1
+extra : request
+#####################################
+#####################################
+처리한 resouceId : EI00000000000000000613
+처리한 결과 execStatus : 3
+#####################################
 ```
 
 #### Application 하는 일
@@ -150,11 +161,11 @@ execStatus : 2
 
 
 ## FAQ
-### `node application` 실행 시  mgmtCmd부분에서 `statusCode:400`에러가 발생합니다.
+#### `node application` 실행 시  mgmtCmd부분에서 `statusCode:400`에러가 발생합니다.
 ThingPlug사이트에서 디바스의 CSE_ID와 passCode를 입력하여 자신의 계정에 등록을 해야합니다. 이 등록과정 이후에 `사용자 인증키`를 통해서 디바이스에 접근이 가능합니다.
 
-### `node application` 실행 시  mgmtCmd부분에서 `statusCode:404`에러가 발생합니다.
-device먼저 실행한 후 application.js를 실행해야합니다. [config.js 설정]()부분 부터 다시 따라해보세요.
+#### `node application` 실행 시  mgmtCmd부분에서 `statusCode:404`에러가 발생합니다.
+device먼저 실행한 후 application.js를 실행해야합니다. [config.js 수정](https://github.com/SKT-ThingPlug/thingplug-starter-kit#configjs-수정)부분 부터 다시 따라해보세요.
 
-### device 실행시 마다 매번 CSE_ID를 등록해야하는 건가요?
+#### device 실행시 마다 매번 CSE_ID를 등록해야하는 건가요?
 아닙니다. 디바이스마다 최초 1회만 CSE_ID를 등록하면 됩니다. 본 스타터킷에서는 디바이스 실행시 매번 CSE_ID를 등록하도록 되어 있습니다. 이 경우에도 문제가 되는 것은 아닙니다. 단 이 경우 403 Fobidden Status와 함께 device key가 바뀝니다.
