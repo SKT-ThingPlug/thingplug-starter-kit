@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "SKT의 ThingPlug Starter Kit",
   "scripts": {
-    "start": "gulp serve"
+    "start": "node device.js"
   },
   "keywords": [
     "skt",
