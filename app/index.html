@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Application - ThingPlug Starter Kit</title>
+</head>
+<body>
+  <h1>안녕하세요.</h1>
+  <p>ThingPlug를 사용하는 웹 애플리케이션입니다.</p>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script>
+    // script 
+    var optionData = {
+      uKey : 'MGE4YjhiZTctNWUyNi00MzRkLWIwOWQtMWI3ZGMxZDRkNmEx',
+      container_name:'plugtest01',
+      cse_ID : '0.2.481.1.0001.001.0010008'
+    }
+    $.ajax({
+      type: 'GET',
+      crossDomain : true,
+      url: 'http://61.250.21.212:9000/ThingPlug/remoteCSE-'+ optionData.cse_ID+ '/container-'+optionData.container_name+'/latest',
+      contentType: 'text/xml; charset=utf-8',
+      headers: {
+        Accept: 'application/xml',
+        locale: 'ko',
+        uKey : optionData.uKey,
+        'X-M2M-RI': '12345',
+        'X-M2M-Origin': 'ThingPlug',
+      },
+      success: function(result){
+        console.log(result);
+      },
+      error: function(err){
+        console.log(err);
+      }
+  });
+  </script>
+</body>
+</html>
