@@ -2,14 +2,14 @@
 # SKT ThingPlug oneM2M Starter Kit
 본 Starter Kit은 SKT의 ThingPlug oneM2M API를 이용하여 IoT 서비스를 제작하는 가장 기초적인 방법을 구현해둔 프로젝트 입니다. SKT의 ThingPlug oneM2M을 이용한 서비스 개발을 Starter Kit에서부터 시작해보세요.
 
-## oneM2M의 구성과 StarterKit의 목적
+## oneM2M의 구성과 Starter Kit의 목적
 oneM2M에서는 역할에 따라 구성원을 다음 세 가지로 구분할 수 있습니다.
 
 ![oneM2M 구성과 주요 요청](https://github.com/SKT-ThingPlug/thingplug-starter-kit/raw/master/images/oneM2M.png)
 
 - 애플리케이션 클라이언트
 - 디바이스 클라이언트
-- OneM2M
+- oneM2M
 
 애플리케이션과 디바이스는 직접적으로 통신하지 않고 각 구성원들은 기본적으로 REST API를 통해 oneM2M과 통신을 하게 됩니다. oneM2M은 SKT의 ThingPlug가 제공을 해주니 여러분은 디바이스와 애플리케이션만 구현하면 되므로 제품 개발 시 제품자체에 더욱 집중 할 수 있습니다. 본 Starer Kit은 바로 이 두 가지, 애플리케이션과 디바이스의 기본적인 역할을 구현해 놓은 것입니다. 따라서 이 Starter Kit은 ThingPlug의 oneM2M을 직접 경험해 봄으로써 oneM2M을 이해하고 바로 제품개발을 시작할 수 있는 시작점을 제공하는데 그 목적이 있습니다.
 
