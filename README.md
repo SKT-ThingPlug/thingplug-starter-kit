@@ -114,7 +114,7 @@ content-location: http://sandbox.sktiot.com:9000/ThingPlug/remoteCSE-000.0000.00
 ### ThingPlug에 내 계정에 Device를 등록
 애플리케이션에서 ThingPlug oneM2M REST API를 통해 데이터를 필요에 따라 제어명령을 보내기 위해서는 먼저 ThingPlug 사이트에 위 device(생성된 remoteCSE)를 등록해야합니다.
 
-- [ThingPlug](https://sandbox.sktiot.com) 로그인 후 [ 마이페이지의 디바이스 등록](https://sandbox.sktiot.com/IoTPortal/device/deviceInsert) 페이지로 이동합니다.
+- [ThingPlug](https://sandbox.sktiot.com) 로그인 후 "마이페이지 > 나의 디바이스 > 디바이스 등록" 페이지로 이동합니다.
 - 위에서 device 실행 시 사용한 `config.js`의 디바이스 아이디(cse_ID)와 passCode를 개별등록에 입력하고 `디바이스 정보확인` 버튼을 누릅니다.
 - 필수정보 입력화면에 내용을 해당 내용을 넣어준 후 하단 '저장'버튼을 누르면 ThingPlug에 Device 등록이 완료됩니다. 
 
