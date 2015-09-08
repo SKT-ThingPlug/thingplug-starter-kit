@@ -3,8 +3,7 @@ module.exports = {
   cse_ID : '1.2.481.1.900.90.01000000000', // Device ID 형식 확인 필요(뒷자리 임의지정)
   app_ID : 'myApplication',
   passCode : '000101', // ThingPlug에 Device등록시 사용할 Device의 비밀번호 (4자~16자)
-  // request_ID : '12345', //Request ID는 CSE(플랫폼)에서 동적으로 할당하는 값으로 해당 값 삭제
   container_name:'plugtest01', // starter kit에서 생성하고 사용할 container 이름 (임의지정)
   mgmtCmd_name : 'mgmtCmd_1', // starter kit에서 생성하고 사용할 제어 명령 이름 (임의지정)
-  cmdType : 'senser_1' // starter kit에서 사용할 제어 타입 (임의지정))
+  cmdType : 'sensor_1' // starter kit에서 사용할 제어 타입 (임의지정))
 };

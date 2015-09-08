@@ -41,8 +41,8 @@ git clone git@github.com:SKT-ThingPlug/thingplug-starter-kit.git
 복사된 폴더 안을 살펴보면 다음과 같은 주요파일이 있습니다.
 
 - `device.js` : 실제 IoT Device에서 구동되는 코드 입니다. Node.js로 구현되어 있어 Node.js가 실행 가능한 컴퓨터에서 실행가능하며 [BeegleBone Black](http://beagleboard.org/black) 같이 Node.js를 구동할 수 있는 하드웨어 플랫폼에서도 직접 실행이 가능합니다.
-- `application.js` : `device.js`에서 ThingPlug로 전송한 데이트를 이용하는 주체로써 일반적으로 웹이나 앱에 해당합니다. 사용자와의 접점으로 데이터를 사용자에게 보여주거나 사용자로부터 어떠한 명령을 받아 oneM2M서버를 통해 실제 device를 제어하기도 합니다.
-- `config.js` : 개발자 인증키와 디바이스 ID등 스타터킷 실행에 앞서 필요한 환경 값을 가지고 있습니다. 각자의 상황에 맞게 수정이 필요합니다. [config.js 수정참고 섹션]()
+- `application.js` : `device.js`에서 ThingPlug로 전송한 데이터를 이용하는 주체로써 일반적으로 웹이나 앱에 해당합니다. 사용자와의 접점으로 데이터를 사용자에게 보여주거나 사용자로부터 어떠한 명령을 받아 oneM2M서버를 통해 실제 device를 제어하기도 합니다.
+- `config.js` : 개발자 인증키와 디바이스 ID등 스타터킷 실행에 앞서 필요한 환경 값을 가지고 있습니다. 각자의 상황에 맞게 수정이 필요합니다. [config.js 수정참고 섹션](https://github.com/SKT-ThingPlug/thingplug-starter-kit#configjs-수정)
 
 
 #### 프로젝트 dependency 설치
@@ -83,30 +83,28 @@ module.exports = {
 ### Device 실행
 `node device` 명령어로 Device를 실행하면 다음과 같은 결과 화면이 나오면 정상입니다.
 
-```ShellSession
+```
 $ node device
 ### ThingPlug Device ###
 1. remoteCES 생성 결과
-다비이스 키 : NzVlNGE1ZDktMjIxMy00NDQzLTlkYjUtZTJiMGIxZmI1NmE5
-content-location: http://61.250.21.212:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000
+다비이스 키 : THIS=IS=A=SAMPLE=KEY=BVNUFtQTVYbkU2WVkxUkQ0R0ZLNCs5eTNFcUEyY0Voa29CTGZvR0tFcFlxWk1UnJJZQ==
+content-location: http://sandbox.sktiot.com:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000
+### mqtt connected ###
 2. container 생성 결과
-content-location: http://61.250.21.212:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000/container-plugtest01
+content-location: http://sandbox.sktiot.com:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000/container-plugtest01
 3. mgmtCmd 생성 결과
-content-location: http://61.250.21.212:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000/mgmtCmd-mgmtCmd_1
+content-location: http://sandbox.sktiot.com:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000/mgmtCmd-mgmtCmd_1
 4. content Instance 주기적 생성 시작
-센서 content : 20
-content-location: http://61.250.21.212:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000/container-plugtest01/contentInstance-CI00000000000000034933
-생성 resourceID : CI00000000000000034933
-센서 content : 3
-content-location: http://61.250.21.212:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000/container-plugtest01/contentInstance-CI00000000000000034934
-생성 resourceID : CI00000000000000034934
+센서 content : 33
+센서 content : 10
+...
 ```
 
 #### Device가 하는 일
  
  구분  | 설명 | HTTP Method
 -------|----|---
-1. remoteCES 생성 | remoteCES ID와 pasCode를 oneM2M서버에 등록합니다. | POST
+1. remoteCSE 생성 | remoteCSE ID와 passCode를 oneM2M서버에 등록합니다. | POST
 2. 컨테이너 생성 | 데이터를 저장해둘 container를 생성합니다. 파일시스템의 폴더와 같은 역할을 합니다. | POST
 3. mgmtCmd 생성 | 디바이스에서 받아들일 수 있는 제어 명령어를 생성 합니다. 이 생성된 명령어 이름은 Application이 제어 명령을 내릴 때 사용합니다. | POST
 4. Content Instance 생성 | 일반적으로 센서의 측정값을 지정한 컨테이너에 기록합니다. | POST
@@ -114,16 +112,16 @@ content-location: http://61.250.21.212:9000/ThingPlug/remoteCSE-000.0000.00000.0
 6. execInstance 갱신 | MQTT등을 통해 전달받은 execInstance의 결과를 갱신합니다. | PUT
   
 ### ThingPlug에 내 계정에 Device를 등록
-애플리케이션에서 ThingPlug oneM2M REST API를 통해 데이터를 필요에 따라 제어명령을 보내기 위해서는 먼저 ThingPlug 사이트에 위 device(생성된 remoteCES)를 등록해야합니다.
+애플리케이션에서 ThingPlug oneM2M REST API를 통해 데이터를 필요에 따라 제어명령을 보내기 위해서는 먼저 ThingPlug 사이트에 위 device(생성된 remoteCSE)를 등록해야합니다.
 
-- [ThingPlug](https://sandbox.sktiot.com) 로그인 후 [ 마이페이지의 디바이스등록](https://sandbox.sktiot.com/IoTPortal/device/deviceInsert) 페이지로 이동합니다.
-- 위에서 device 실행 시 사용한 `config.js`의 디바이스 아이디(ces_ID)와 passcode를 개별등록에 입력하고 `디바이스 정보확인` 버튼을 누릅니다.
+- [ThingPlug](https://sandbox.sktiot.com) 로그인 후 [ 마이페이지의 디바이스 등록](https://sandbox.sktiot.com/IoTPortal/device/deviceInsert) 페이지로 이동합니다.
+- 위에서 device 실행 시 사용한 `config.js`의 디바이스 아이디(cse_ID)와 passCode를 개별등록에 입력하고 `디바이스 정보확인` 버튼을 누릅니다.
 - 필수정보 입력화면에 내용을 해당 내용을 넣어준 후 하단 '저장'버튼을 누르면 ThingPlug에 Device 등록이 완료됩니다. 
 
 ## Application 실행
 `node application.js` 명령어로 application을 실행합니다. (Application 실행하기 전에 `device.js`가 동작하는 상태로 유지합니다. 따라서 `device.js` 실행을 종료하지 않고 새로운 terminal(커맨드창)을 열어 실행하세요. 계속 실행이 유지되는 `device.js`와 달리 본 스타트업킷에서는 편의상 `application.js`는 한번 실행 후 종료하도록 되어있습니다.)
 
-```ShellSession
+```
 ≫ node application.js 
 1. latest contentInstance 조회
 content : 13
@@ -133,6 +131,10 @@ resouceId : CI00000000000000034932
 content-location: http://61.250.21.212:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000/mgmtCmd-mgmtCmd_1/execInstance-EI00000000000000000517
 resouceId : EI00000000000000000517
 execStatus : 2
+#. execInstance 리소스 조회
+resouceId : EI00000000000000000517
+execStatus : 3
+
 ```
 
 실행 후 `device.js`가 실행중인 터미널을 살펴보면 application이 보낸 mgmtCmd에 대한 아래와 같은 MQTT 로그가 보일 것입니다.
@@ -143,7 +145,7 @@ MQTT 수신 mgmtCmd Name : mgmtCmd_1
 extra : request
 #####################################
 #####################################
-처리한 resouceId : EI00000000000000000613
+처리한 resouceId : EI00000000000000000517
 처리한 결과 execStatus : 3
 #####################################
 ```
