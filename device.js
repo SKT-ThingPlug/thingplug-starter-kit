@@ -46,7 +46,7 @@ httpReq({
     +'    <rr>true</rr>'														//등록하는 CSE가 접근하는 한 객체 여부 표기 (requestReachability == rr)
     +'</m2m:csr>'
 }).then(function(result){
-  console.log(colors.blue('1. remoteCES 생성 결과'));
+  console.log(colors.green('1. remoteCES 생성 결과'));
   if(result.headers.dkey){
     console.log('다비이스 키 : '+ result.headers.dkey);
     console.log('content-location: '+ result.headers['content-location']);		//생성된 자원의 URI
@@ -115,7 +115,7 @@ httpReq({
       +'</m2m:cnt>'
   });
 }).then(function(result){
-  console.log(colors.blue('2. container 생성 결과'));
+  console.log(colors.green('2. container 생성 결과'));
   console.log('content-location: '+ result.headers['content-location']);		//생성된 자원의 URI
   
   
@@ -146,10 +146,10 @@ httpReq({
         +'</m2m:mgc>'	
   });
 }).then(function(result){
-  console.log(colors.blue('3. mgmtCmd 생성 결과'));	
+  console.log(colors.green('3. mgmtCmd 생성 결과'));	
   console.log('content-location: '+ result.headers['content-location']);		//생성된 자원의 URI
   if(result.headers){
-    console.log(colors.blue('4. content Instance 주기적 생성 시작'));
+    console.log(colors.green('4. content Instance 주기적 생성 시작'));
     setContentInterval();
   }
 }).catch(function(err){

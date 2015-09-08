@@ -32,7 +32,7 @@ httpReq({
     }
   }
 }).then(function(result){
-  console.log(colors.blue('1. latest contentInstance 조회'));
+  console.log(colors.green('1. latest contentInstance 조회'));
   if(result.data){
     parseString(result.data,function(err, xmlObj){
       console.log('content : ' + xmlObj['m2m:cin']['con'][0]);
@@ -63,7 +63,7 @@ httpReq({
       +'</m2m:mgc>'
   });
 }).then(function(result){
-  console.log(colors.blue('2. mgmtCmd 제어 요청'));
+  console.log(colors.green('2. mgmtCmd 제어 요청'));
   
   if(result.data){
     parseString(result.data,function(err, xmlObj){
@@ -98,7 +98,7 @@ function checkMgmtResults(resourceID){
        }
      }
    }).then(function(result){
-     console.log(colors.blue('#. execInstance 리소스 조회'));
+     console.log(colors.green('#. execInstance 리소스 조회'));
      if(result.data){
        parseString(result.data,function(err, xmlObj){
          console.log('resouceId : ' + xmlObj['m2m:exin']['ri'][0]);
