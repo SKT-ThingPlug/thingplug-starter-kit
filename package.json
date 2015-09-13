@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "SKT의 ThingPlug Starter Kit",
   "scripts": {
-    "start": "node device.js"
+    "device": "node device.js",
+    "app": "node application.js"
   },
   "keywords": [
     "skt",
@@ -20,7 +21,10 @@
   },
   "dependencies": {
     "colors": "^1.1.2",
-    "mqtt": "^1.3.5",
+    "mqtt": "^1.4.0",
     "xml2js": "^0.4.10"
-  }
+  },
+  "engines": {
+    "node": ">=0.12.x"
+  },
 }

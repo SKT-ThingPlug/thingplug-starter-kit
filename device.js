@@ -30,10 +30,10 @@ httpReq({
       'X-M2M-RI': randomInt(100000, 999999),									//해당 요청 메시지에 대한 고유 식별자 (RI == Request ID) / 해당 식별자는 CSE가 자동 생성
       'X-M2M-NM': 'remoteCSE-'+optionData.cse_ID,								//해당 요청으로 생성하게 되는 자원의 이름 (NM == Name)
       passCode: optionData.passCode,
-      locale: 'ko',
+      // locale: 'ko',
       Accept: 'application/xml',
       'Content-Type': 'application/vnd.onem2m-res+xml;ty=16',
-      uKey: optionData.uKey
+      // uKey: optionData.uKey
     }
   },
   body: '<?xml version="1.0" encoding="UTF-8"?>'
@@ -57,7 +57,7 @@ httpReq({
   // MQTT Connect
   return new Promise(function(resolve, reject){
     var mqtt = require('mqtt');
-    var client  = mqtt.connect('mqtt://61.250.21.212');
+    var client  = mqtt.connect('mqtt://sandbox.sktiot.com');
    
     client.on('connect', function () {
       console.log('### mqtt connected ###');
@@ -173,7 +173,6 @@ function setContentInterval(){
           locale: 'ko',
           'X-M2M-Origin': optionData.cse_ID,
           'X-M2M-RI': randomInt(100000, 999999),
-          'X-M2M-NM': 'heartbeat',
           'Content-Type': 'application/xml',
 		      dKey : optionData['dKey']
         }
@@ -209,7 +208,7 @@ function updateExecInstance(ei){
       headers : {
         Accept: 'application/xml',
         dKey : optionData.dKey,
-        'X-M2M-Origin': 'ThingPlug',
+        'X-M2M-Origin': optionData.cse_ID,
         'X-M2M-RI': randomInt(100000, 999999),
         'Content-Type': 'application/xml',
         locale: 'ko',

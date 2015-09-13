@@ -30,6 +30,9 @@ Starter Kit을 실행하기 위해서는 다음과 같은 도구가 설치되어
 
 - [Node.js](https://nodejs.org) : 공식 사이트에서 설치 패키지를 다운받을 수 있습니다.
 
+> 주의!
+ThingPlug oneM2M을 이용하기 위해서는 ThingPlug 계정이 필요합니다. ThingPlug 회원가입시 사용할 디바이스 연동 프로토콜을 반드시 HTTP로 선택해야합니다. HTTP로 선택하지 않고 이미 계정을 만드셨다면 다른 계정을 하나 더 만들어서 진행하세요.
+
 #### 코드 복사
 
 코드는 Release된 [Zip파일](https://github.com/SKT-ThingPlug/thingplug-starter-kit/archive/master.zip)을 다운 받아서 임의에 폴더에 압축을 해제하세요. 또는 아래 명령어를 이용하여 github의 master 버전을 clone해도 됩니다.
@@ -78,7 +81,6 @@ module.exports = {
   cmdType : 'senser_1' // starter kit에서 사용할 제어 타입 (임의지정)
 };
 ```
-
 
 ### Device 실행
 `node device` 명령어로 Device를 실행하면 다음과 같은 결과 화면이 나오면 정상입니다.
@@ -171,3 +173,6 @@ device먼저 실행한 후 application.js를 실행해야합니다. [config.js �
 
 #### device 실행 시 마다 매번 CSE_ID를 등록해야하는 건가요?
 아닙니다. 디바이스마다 최초 1회만 CSE_ID를 등록하면 됩니다. 본 스타터킷에서는 디바이스 실행 시 매번 CSE_ID를 등록하도록 되어 있습니다. 이 경우에도 문제가 되는 것은 아닙니다. 단 이 경우 403 Fobidden Status와 함께 device key가 바뀝니다.
+
+#### 마이페이지에 사용자 인증키가 없는데요?
+ThingPlug 회원가입 입력양식에 있는 디바이스 연동 프로토콜 선택을 반드시 HTTP로 선택해야 합니다. 그렇지 않을 경우 oneM2M API를 이용할 수 없습니다. 가입시에만 선택이 가능하기 때문에 새로운 아이디로 새 계정을 만들고 가입 입력양식에서 꼭 HTTP로 선택해주세요. 
