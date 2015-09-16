@@ -74,8 +74,8 @@ cse_ID는 디바이스를 oneM2M에서 구분하기 위해 주민번호처럼 �
 module.exports = {
   uKey : 'USER_KEY_FROM_SANDBOX.SKIOT.COM', // 사용자 인증키 : https://sandbox.sktiot.com/IoTPortal/mypage/myiot
   cse_ID : '1.2.481.1.900.90.01000000000', // Device ID (본 예제에서는 맨 뒷자리를 핸드폰 번호 사용 권장)
-  app_ID : 'myApplication', //Application의 구분을 위한 ID
   passCode : '000101', // ThingPlug에 Device등록 시 사용할 Device의 비밀번호 (본 예제에서는 생년월일 사용 권장)
+  app_ID : 'myApplication', //Application의 구분을 위한 ID
   container_name:'plugtest01', // starter kit에서 생성하고 사용할 container 이름 (임의지정)
   mgmtCmd_name : 'mgmtCmd_1', // starter kit에서 생성하고 사용할 제어 명령 이름 (임의지정)
   cmdType : 'senser_1' // starter kit에서 사용할 제어 타입 (임의지정)
