@@ -14,7 +14,6 @@ exports.request = function(args){
         });
       });
       if(res.statusCode!==200 && res.statusCode!==201 && res.statusCode!==409){
-        // console.log(res);
         reject({ 
           statusCode : res.statusCode,
           error: 'statusCode is '+res.statusCode,
@@ -30,7 +29,11 @@ exports.request = function(args){
       });
     });
     if(args.body){
-      req.write(args.body);
+      if(typeof args.body == 'string'){
+        req.write(args.body);
+      }else{
+        req.write(JSON.stringify(args.body));
+      }
     }
     req.end();
   });
