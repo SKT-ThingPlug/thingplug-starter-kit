@@ -18,6 +18,7 @@ function randomInt (low, high) {
 }
 
 
+// 1. node 생성
 httpReq({ 
   options: {
     host : 'sandbox.sktiot.com',
@@ -36,13 +37,14 @@ httpReq({
     ni: optionData.node_ID
   }
 }).then(function(result){
-    if(result.statusCode == 409){
-      console.log('이미 생성된 node resource ID 입니다.');
-    }
-    optionData.nodeRI = JSON.parse(result.data).ri;
-    console.log(colors.yellow('생성 node Resource ID : ') + optionData.nodeRI);
+  console.log(colors.green('1. node 생성 결과'));
+  if(result.statusCode == 409){
+    console.log('이미 생성된 node resource ID 입니다.');
+  }
+  optionData.nodeRI = JSON.parse(result.data).ri;
+  console.log(colors.yellow('생성 node Resource ID : ') + optionData.nodeRI);
     
-  // 1. remoteCSE생성 요청(기기등록)
+  // 2. remoteCSE생성 요청(기기등록)
   return httpReq({ 
     options: {
       host : 'sandbox.sktiot.com',
@@ -66,9 +68,10 @@ httpReq({
       rr : true,  //등록하는 CSE가 접근하는 한 객체 여부 표기 (requestReachability == rr)
       nl : optionData.node_ID
     }
-  })
+  });
+  
 }).then(function(result){
-  console.log(colors.green('1. remoteCSE 생성 결과'));
+  console.log(colors.green('2. remoteCSE 생성 결과'));
   if(result.statusCode == 409){
     console.log('이미 생성된 remoteCSE 입니다.');
   }
@@ -108,7 +111,7 @@ httpReq({
   });
 }).then(function(result){
   
-  // 2. container 생성 요청
+  // 3. container 생성 요청
   return httpReq({ 
     options: {
       host : 'sandbox.sktiot.com',
@@ -131,14 +134,14 @@ httpReq({
     }
   });
 }).then(function(result){
-  console.log(colors.green('2. container 생성 결과'));
+  console.log(colors.green('3. container 생성 결과'));
   if(result.statusCode == 409){
     console.log('이미 생성된 container 입니다.');
   }
   console.log('content-location: '+ result.headers['content-location']);		//생성된 자원의 URI
   
   
-  // 3. 장치 제어를 위한 device mgmtCmd 리소스 생성
+  // 4. 장치 제어를 위한 device mgmtCmd 리소스 생성
   return httpReq({
     options: {
       host : 'sandbox.sktiot.com',
@@ -162,7 +165,7 @@ httpReq({
     }
   });
 }).then(function(result){
-  console.log(colors.green('3. mgmtCmd 생성 결과'));	
+  console.log(colors.green('4. mgmtCmd 생성 결과'));	
   if(result.statusCode == 409){
     console.log('이미 생성된 mgmtCmd 입니다.');
   }
