@@ -13,11 +13,13 @@ exports.request = function(args){
           data: chunk
         });
       });
-      if(res.statusCode!==200 && res.statusCode!==201 && res.statusCode!==403){
+      if(res.statusCode!==200 && res.statusCode!==201 && res.statusCode!==409){
+        // console.log(res);
         reject({ 
           statusCode : res.statusCode,
           error: 'statusCode is '+res.statusCode,
-          options: args.options
+          options: args.options,
+          responseHeader : res.headers
         });
       }
     });

@@ -18,35 +18,75 @@ function randomInt (low, high) {
 }
 
 
-// 1. remoteCSE생성 요청(기기등록)
 httpReq({ 
   options: {
     host : 'sandbox.sktiot.com',
     port: '9000',
-    path : '/ThingPlug?rty=16',													//rty는 생성하고자 하는 Resource Type의 식별자 (rty == 16은 remoteCSE를 의미함)
+    path : '/ThingPlug',													//rty는 생성하고자 하는 Resource Type의 식별자 (rty == 16은 remoteCSE를 의미함)
     method: 'POST',
     headers : {	
-      'X-M2M-Origin': optionData.cse_ID,										//해당 요청 메시지 송신자의 식별자
+      'X-M2M-Origin': optionData.node_ID,										//해당 요청 메시지 송신자의 식별자
       'X-M2M-RI': randomInt(100000, 999999),									//해당 요청 메시지에 대한 고유 식별자 (RI == Request ID) / 해당 식별자는 CSE가 자동 생성
-      'X-M2M-NM': 'remoteCSE-'+optionData.cse_ID,								//해당 요청으로 생성하게 되는 자원의 이름 (NM == Name)
-      passCode: optionData.passCode,
+      'X-M2M-NM': optionData.node_ID,								//해당 요청으로 생성하게 되는 자원의 이름 (NM == Name)
+      // passCode: optionData.passCode,
       // locale: 'ko',
       Accept: 'application/xml',
-      'Content-Type': 'application/vnd.onem2m-res+xml;ty=16',
+      'Content-Type': 'application/vnd.onem2m-res+xml;ty=14',
       // uKey: optionData.uKey
     }
   },
   body: '<?xml version="1.0" encoding="UTF-8"?>'
-    +'<m2m:csr'																	//remoteCSE 자원에 대한 XML document (csr == remoteCSE)
+    +'<m2m:nod'																	//remoteCSE 자원에 대한 XML document (csr == remoteCSE)
     +'    xmlns:m2m="http://www.onem2m.org/xml/protocols" '				
     +'    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
-    +'    <cst>3</cst>'															//등록하는 CSE의 타입 (IN-CSE = 1, MN-CSE = 2, ASN-CSE = 3) (cseType == cst)
-    +'    <csi>' + optionData.cse_ID + '</csi>'									//등록하는 CSE의 식별자 (CSE-ID == csi)
-    +'    <poa>MQTT|'+optionData.cse_ID+'</poa>'							//등록하는 CSE의 물리적 접근 식별자 또는 주소 (pointOfAccess == poa)
-    +'    <rr>true</rr>'														//등록하는 CSE가 접근하는 한 객체 여부 표기 (requestReachability == rr)
-    +'</m2m:csr>'
+    +'    <ni>'+optionData.node_ID+'</ni>'														//등록하는 CSE가 접근하는 한 객체 여부 표기 (requestReachability == rr)
+    +'</m2m:nod>'
 }).then(function(result){
-  console.log(colors.green('1. remoteCES 생성 결과'));
+    // console.log(result);   
+     
+    if(result.statusCode == 409){
+      console.log('이미 생성된 node resource ID 입니다.');
+    }
+    parseString(result.data,function(err, xmlObj){
+      optionData.nodeRI = xmlObj['m2m:nod']['ri'][0];
+      console.log(colors.yellow('생성 node Resource ID : ') + optionData.nodeRI);
+      
+    });
+    
+  // 1. remoteCSE생성 요청(기기등록)
+  return httpReq({ 
+    options: {
+      host : 'sandbox.sktiot.com',
+      port: '9000',
+      path : '/ThingPlug',													//rty는 생성하고자 하는 Resource Type의 식별자 (rty == 16은 remoteCSE를 의미함)
+      method: 'POST',
+      headers : {	
+        'X-M2M-Origin': optionData.node_ID,										//해당 요청 메시지 송신자의 식별자
+        'X-M2M-RI': randomInt(100000, 999999),									//해당 요청 메시지에 대한 고유 식별자 (RI == Request ID) / 해당 식별자는 CSE가 자동 생성
+        'X-M2M-NM': optionData.node_ID,								//해당 요청으로 생성하게 되는 자원의 이름 (NM == Name)
+        passCode: optionData.passCode,
+        // locale: 'ko',
+        Accept: 'application/xml',
+        'Content-Type': 'application/vnd.onem2m-res+xml;ty=16',
+        // uKey: optionData.uKey
+      }
+    },
+    body: '<?xml version="1.0" encoding="UTF-8"?>'
+      +'<m2m:csr'																	//remoteCSE 자원에 대한 XML document (csr == remoteCSE)
+      +'    xmlns:m2m="http://www.onem2m.org/xml/protocols" '				
+      +'    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+      +'    <cst>3</cst>'															//등록하는 CSE의 타입 (IN-CSE = 1, MN-CSE = 2, ASN-CSE = 3) (cseType == cst)
+      +'    <csi>' + optionData.node_ID + '</csi>'									//등록하는 CSE의 식별자 (CSE-ID == csi)
+      +'    <poa>MQTT|'+optionData.node_ID+'</poa>'							//등록하는 CSE의 물리적 접근 식별자 또는 주소 (pointOfAccess == poa)
+      +'    <rr>true</rr>'														//등록하는 CSE가 접근하는 한 객체 여부 표기 (requestReachability == rr)
+      +'    <nl>'+ optionData.nodeRI +'</nl>'
+      +'</m2m:csr>'
+  })
+}).then(function(result){
+  console.log(colors.green('1. remoteCSE 생성 결과'));
+  if(result.statusCode == 409){
+    console.log('이미 생성된 remoteCSE 입니다.');
+  }
   if(result.headers.dkey){
     console.log('다비이스 키 : '+ result.headers.dkey);
     console.log('content-location: '+ result.headers['content-location']);		//생성된 자원의 URI
@@ -61,7 +101,7 @@ httpReq({
    
     client.on('connect', function () {
       console.log('### mqtt connected ###');
-      client.subscribe(optionData.cse_ID);
+      client.subscribe(optionData.node_ID);
       resolve();
       //client.publish('presence', 'Hello mqtt');
     });
@@ -92,10 +132,10 @@ httpReq({
     options: {
       host : 'sandbox.sktiot.com',
       port: '9000',
-      path : '/ThingPlug/remoteCSE-'+ optionData.cse_ID+ '?rty=3',				//rty == 3은 생성하고자 하는 container 자원을 의미함
+      path : '/ThingPlug/remoteCSE-'+ optionData.node_ID,				//rty == 3은 생성하고자 하는 container 자원을 의미함
       method: 'POST',
       headers : {
-        'X-M2M-Origin': optionData.cse_ID,										//해당 요청 메시지 송신자의 식별자
+        'X-M2M-Origin': optionData.node_ID,										//해당 요청 메시지 송신자의 식별자
         'X-M2M-RI': randomInt(100000, 999999),									//해당 요청 메시지에 대한 고유 식별자 (RI == Request ID) / 해당 식별자는 CSE가 자동 생성
         'X-M2M-NM': optionData.container_name,									//해당 요청으로 생성하게 되는 자원의 이름 (NM == Name)
         dkey : optionData['dKey'],
@@ -108,8 +148,8 @@ httpReq({
       +'<m2m:cnt '																//container 자원에 대한 XML document (cnt == container)
       +'    xmlns:m2m="http://www.onem2m.org/xml/protocols" '
       +'    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
-      +'    <uploadCondition>less than</uploadCondition>'					
-      +'    <uploadConditionValue>50</uploadConditionValue>'
+      // +'    <uploadCondition>less than</uploadCondition>'					
+      // +'    <uploadConditionValue>50</uploadConditionValue>'
       +'    <containerType>heartbeat</containerType>'
       +'    <heartbeatPeriod>300</heartbeatPeriod>'
       +'</m2m:cnt>'
@@ -124,16 +164,17 @@ httpReq({
     options: {
       host : 'sandbox.sktiot.com',
       port: '9000',
-      path : '/ThingPlug/remoteCSE-'+ optionData.cse_ID+ '?rty=12',				//rty == 12는 생성하고자 하는 mgmtCmd 자원을 의미함
+      path : '/ThingPlug',				//rty == 12는 생성하고자 하는 mgmtCmd 자원을 의미함
       method: 'POST',
       headers : {
         Accept: 'application/xml',
         locale: 'ko',
         dkey : optionData['dKey'],
-        'X-M2M-Origin': optionData.cse_ID,										//해당 요청 메시지 송신자의 식별자
+        'X-M2M-Origin': optionData.node_ID,										//해당 요청 메시지 송신자의 식별자
         'X-M2M-RI': randomInt(100000, 999999),									//해당 요청 메시지에 대한 고유 식별자 (RI == Request ID) / 해당 식별자는 CSE가 자동 생성
         'X-M2M-NM': optionData.mgmtCmd_name,									//해당 요청으로 생성하게 되는 자원의 이름 (NM == Name)
-        'Content-Type': 'application/xml'
+        // 'Content-Type': 'application/xml',
+        'Content-Type': 'application/vnd.onem2m-res+xml;ty=12'
       }
     },
     body: '<?xml version="1.0" encoding="UTF-8"?>'
@@ -141,8 +182,8 @@ httpReq({
         +'    xmlns:m2m="http://www.onem2m.org/xml/protocols" '
         +'    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
         +'    <cmt>'+optionData.cmdType+'</cmt>'								//장치 제어 형태 (예, Firmware Update, Memory Check) / (cmt == cmdType)
-        +'    <exe>true</exe>'													//장치 제어 가능 여부 (true/false) / (exe == execEnable))
-        +'    <ext>'+optionData.cse_ID+'</ext>'									//제어되는 장치의 식별자, 일반적으로 자신의 식별자 명시 (ext == exeTarget)
+        // +'    <exe>true</exe>'													//장치 제어 가능 여부 (true/false) / (exe == execEnable))
+        +'    <ext>'+optionData.nodeRI+'</ext>'									//제어되는 장치의 식별자, 일반적으로 자신의 식별자 명시 (ext == exeTarget)
         +'</m2m:mgc>'	
   });
 }).then(function(result){
@@ -166,14 +207,14 @@ function setContentInterval(){
       options : {
         host : 'sandbox.sktiot.com',
         port: '9000',
-        path : '/ThingPlug/remoteCSE-'+ optionData.cse_ID+ '/container-'+optionData.container_name+'?rty=4',		//rty == 4는 생성하고자 하는 contentInstance 자원을 의미함
+        path : '/ThingPlug/remoteCSE-'+ optionData.node_ID+ '/container-'+optionData.container_name,		//rty == 4는 생성하고자 하는 contentInstance 자원을 의미함
         method: 'POST',
         headers : {
           Accept: 'application/xml',
           locale: 'ko',
-          'X-M2M-Origin': optionData.cse_ID,
+          'X-M2M-Origin': optionData.node_ID,
           'X-M2M-RI': randomInt(100000, 999999),
-          'Content-Type': 'application/xml',
+          'Content-Type': 'application/vnd.onem2m-res+xml;ty=4',
 		      dKey : optionData['dKey']
         }
       },
@@ -203,12 +244,12 @@ function updateExecInstance(ei){
     options: {
       host : 'sandbox.sktiot.com',
       port: '9000',
-      path : '/ThingPlug/remoteCSE-'+optionData.cse_ID+'/mgmtCmd-'+optionData.mgmtCmd_name+'/execInstance-'+ei,
+      path : '/ThingPlug/mgmtCmd-'+optionData.mgmtCmd_name+'/execInstance-'+ei,
       method: 'PUT',
       headers : {
         Accept: 'application/xml',
         dKey : optionData.dKey,
-        'X-M2M-Origin': optionData.cse_ID,
+        'X-M2M-Origin': optionData.node_ID,
         'X-M2M-RI': randomInt(100000, 999999),
         'Content-Type': 'application/xml',
         locale: 'ko',

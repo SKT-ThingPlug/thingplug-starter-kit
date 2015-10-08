@@ -21,7 +21,7 @@ httpReq({
   options: {
     host : 'sandbox.sktiot.com',
     port: '9000',
-    path : '/ThingPlug/remoteCSE-'+ optionData.cse_ID+ '/container-'+optionData.container_name+'/latest',
+    path : '/ThingPlug/remoteCSE-'+ optionData.node_ID+ '/container-'+optionData.container_name+'/latest',
     method: 'GET',
     headers : {
       Accept: 'application/xml',
@@ -45,14 +45,14 @@ httpReq({
     options: {
       host : 'sandbox.sktiot.com',
       port: '9000',
-      path : '/ThingPlug/remoteCSE-'+ optionData.cse_ID+ '/mgmtCmd-'+optionData.mgmtCmd_name+'?rty=8',
-      method: 'POST',
+      path : '/ThingPlug/mgmtCmd-'+optionData.mgmtCmd_name,
+      method: 'PUT',
       headers : {
         Accept: 'application/xml',
         uKey : optionData.uKey,
         'X-M2M-Origin': optionData.app_ID,
         'X-M2M-RI': randomInt(100000, 999999),
-        'Content-Type': 'application/xml'
+        'Content-Type': 'application/vnd.onem2m-res+xml;ty=8',
       }
     },
     body : '<?xml version="1.0" encoding="UTF-8"?>'
@@ -60,17 +60,18 @@ httpReq({
       +'    xmlns:m2m="http://www.onem2m.org/xml/protocols" '
       +'    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
       +'    <exra>request</exra>'
+			+'    <exe>test</exe>'
       +'</m2m:mgc>'
   });
 }).then(function(result){
   console.log(colors.green('2. mgmtCmd 제어 요청'));
-  
   if(result.data){
     parseString(result.data,function(err, xmlObj){
-      console.log('content-location: '+ result.headers['content-location']);
-      console.log('resouceId : ' + xmlObj['m2m:exin']['ri'][0]);
-      console.log('execStatus : ' + xmlObj['m2m:exin']['exs'][0]);
-      return checkMgmtResults(xmlObj['m2m:exin']['ri'][0]);
+			console.log(xmlObj['m2m:mgc']['m2m:exin'][0]['ri'][0]);
+			console.log(xmlObj['m2m:mgc']['m2m:exin'][0]['exs'][0]);
+      // console.log('resouceId : ' + xmlObj['m2m:mgc']['m2m:exin'][0]['ri'][0]);
+      // console.log('execStatus : ' + xmlObj['m2m:mgc']['m2m:exin'][0]['exs'][0]);
+      return checkMgmtResults(xmlObj['m2m:mgc']['m2m:exin'][0]['ri'][0]);
     });
   }
   
@@ -86,7 +87,7 @@ function checkMgmtResults(resourceID){
      options: {
        host : 'sandbox.sktiot.com',
        port: '9000',
-       path : '/ThingPlug/remoteCSE-'+ optionData.cse_ID+ '/mgmtCmd-'+optionData.mgmtCmd_name+'/execInstance-'+ resourceID,
+       path : '/ThingPlug/mgmtCmd-'+optionData.mgmtCmd_name+'/execInstance-'+ resourceID,
        method: 'GET',
        headers : {
          Accept: 'application/xml',

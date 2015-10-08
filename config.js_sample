@@ -4,6 +4,6 @@ module.exports = {
   passCode : '000101', // ThingPlug에 Device등록 시 사용할 Device의 비밀번호 (본 예제에서는 생년월일 사용 권장)
   app_ID : 'myApplication', //Application의 구분을 위한 ID
   container_name:'plugtest01', // starter kit에서 생성하고 사용할 container 이름 (임의지정)
-  mgmtCmd_name : 'mgmtCmd_1', // starter kit에서 생성하고 사용할 제어 명령 이름 (임의지정)
+  mgmtCmd_name : 'myMGMT', // starter kit에서 생성하고 사용할 제어 명령 이름 (임의지정)
   cmdType : 'senser_1' // starter kit에서 사용할 제어 타입 (임의지정)
 };
