@@ -50,21 +50,13 @@ httpReq({
         uKey : optionData.uKey,
         'X-M2M-Origin': optionData.app_ID,
         'X-M2M-RI': randomInt(100000, 999999),
-        'Content-Type': 'application/vnd.onem2m-res+xml;ty=8',
-				// 'Content-Type': 'application/json;ty=8',
+				'Content-Type': 'application/json;ty=8',
       }
     },
-		// body : {
-		// 	exra : 'request',
-		// 	exe : 'test'
-		// }
-    body : '<?xml version="1.0" encoding="UTF-8"?>'
-      +'<m2m:mgc '
-      +'    xmlns:m2m="http://www.onem2m.org/xml/protocols" '
-      +'    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
-      +'    <exra>request</exra>'
-			+'    <exe>test</exe>'
-      +'</m2m:mgc>'
+		body : {
+			exra : 'request',
+			exe : true
+		}
   });
 }).then(function(result){
   console.log(colors.green('2. mgmtCmd 제어 요청'));
