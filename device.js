@@ -34,7 +34,7 @@ httpReq({
     }
   },
   body : {
-    ni: optionData.node_ID
+    ni: optionData.node_ID						//등록한 장치의 식별자 (ni == nodeID) 
   }
 }).then(function(result){
   console.log(colors.green('1. node 생성 결과'));
@@ -49,23 +49,23 @@ httpReq({
     options: {
       host : 'sandbox.sktiot.com',
       port: '9000',
-      path : '/ThingPlug',													//rty는 생성하고자 하는 Resource Type의 식별자 (rty == 16은 remoteCSE를 의미함)
+      path : '/ThingPlug',														//rty는 생성하고자 하는 Resource Type의 식별자 (rty == 16은 remoteCSE를 의미함)
       method: 'POST',
       headers : {	
         'X-M2M-Origin': optionData.node_ID,										//해당 요청 메시지 송신자의 식별자
         'X-M2M-RI': randomInt(100000, 999999),									//해당 요청 메시지에 대한 고유 식별자 (RI == Request ID) / 해당 식별자는 CSE가 자동 생성
-        'X-M2M-NM': optionData.node_ID,								//해당 요청으로 생성하게 되는 자원의 이름 (NM == Name)
+        'X-M2M-NM': optionData.node_ID,											//해당 요청으로 생성하게 되는 자원의 이름 (NM == Name)
         'passCode': optionData.passCode,
         'Accept': 'application/json',
         'Content-Type': 'application/json;ty=16'
       }
     },
     body : {
-      cst : 3,      //등록하는 CSE의 타입 (IN-CSE = 1, MN-CSE = 2, ASN-CSE = 3) (cseType == cst)
-      csi : optionData.node_ID, //등록하는 CSE의 식별자 (CSE-ID == csi)
-      poa : ['MQTT|'+optionData.node_ID], //등록하는 CSE의 물리적 접근 식별자 또는 주소 (pointOfAccess == poa)
-      rr : true,  //등록하는 CSE가 접근하는 한 객체 여부 표기 (requestReachability == rr)
-      nl : optionData.nodeRI
+      cst : 3,      															//등록하는 CSE의 타입 (IN-CSE = 1, MN-CSE = 2, ASN-CSE = 3) (cseType == cst)
+      csi : optionData.node_ID, 												//등록하는 CSE의 식별자 (CSE-ID == csi)
+      poa : ['MQTT|'+optionData.node_ID], 										//등록하는 CSE의 물리적 접근 식별자 또는 주소 (pointOfAccess == poa)
+      rr : true,  																//등록하는 CSE가 접근하는 한 객체 여부 표기 (requestReachability == rr)
+      nl : optionData.node_ID
     }
   });
   
@@ -159,8 +159,8 @@ httpReq({
     },
     body: {
       cmt : optionData.cmdType,   //장치 제어 형태 (예, Firmware Update, Memory Check) / (cmt == cmdType)
-      exe : true,                 //장치 제어 가능 여부 (true/false) / (exe == execEnable))
-      ext : optionData.nodeRI     //제어되는 장치의 식별자, 일반적으로 자신의 식별자 명시 (ext == exeTarget)
+      exe : true,                 //장치 제어를 위한 Trigger Attribute (true/false) / (exe == execEnable))
+      ext : optionData.nodeRI     //제어되는 장치의 식별자로 제어하고자 하는 장치의 node 자원 식별자를 명시함 (ext == exeTarget)
     }
   });
 }).then(function(result){
@@ -198,7 +198,7 @@ function setContentInterval(){
         }
       },
       body : {
-        cnf : 'text', //업로드 하는 데이터의 정보 (cnf = contentInfo)
+        cnf : 'text', //업로드 하는 데이터 타입의 정보 (cnf = contentInfo)
         con : value   //업로드 하는 데이터 (con == content)
       }
     }).then(function(result){
