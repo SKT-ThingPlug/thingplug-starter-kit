@@ -39,11 +39,11 @@ httpReq({
 		console.log('생성일 : '+ data.ct);
   }
 
-  return httpReq({ // 2. mgmCmd 요청
+  return httpReq({ // 2. mgmtCmd 요청
     options: {
       host : 'sandbox.sktiot.com',
       port: '9000',
-      path : '/ThingPlug/mgmtCmd-'+optionData.mgmtCmd_name,
+      path : '/ThingPlug/mgmtCmd-' + optionData.mgmtCmd_prefix + optionData.node_ID,
       method: 'PUT',
       headers : {
         Accept: 'application/json',
@@ -70,7 +70,7 @@ httpReq({
   }
   
 }).catch(function(err){
-  console.log(colors.red('2. mgmtCmd 제어 요청 에러'));
+  // console.log(colors.red('2. mgmtCmd 제어 요청 에러'));
   console.log(err);
   
 });
@@ -80,7 +80,7 @@ function checkMgmtResults(resourceID){
      options: {
        host : 'sandbox.sktiot.com',
        port: '9000',
-       path : '/ThingPlug/mgmtCmd-'+optionData.mgmtCmd_name+'/execInstance-'+ resourceID,
+       path : '/ThingPlug/mgmtCmd-'+ optionData.mgmtCmd_prefix + optionData.nodeID +'/execInstance-'+ resourceID,
        method: 'GET',
        headers : {
          Accept: 'application/json',

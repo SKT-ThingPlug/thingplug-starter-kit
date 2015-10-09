@@ -65,7 +65,7 @@ httpReq({
       csi : optionData.node_ID, 												//등록하는 CSE의 식별자 (CSE-ID == csi)
       poa : ['MQTT|'+optionData.node_ID], 										//등록하는 CSE의 물리적 접근 식별자 또는 주소 (pointOfAccess == poa)
       rr : true,  																//등록하는 CSE가 접근하는 한 객체 여부 표기 (requestReachability == rr)
-      nl : optionData.node_ID
+      nl : optionData.nodeRI
     }
   });
   
@@ -153,7 +153,7 @@ httpReq({
         dkey : optionData['dKey'],
         'X-M2M-Origin': optionData.node_ID,										//해당 요청 메시지 송신자의 식별자
         'X-M2M-RI': randomInt(100000, 999999),							  //해당 요청 메시지에 대한 고유 식별자 (RI == Request ID) / 해당 식별자는 CSE가 자동 생성
-        'X-M2M-NM': optionData.mgmtCmd_name,									//해당 요청으로 생성하게 되는 자원의 이름 (NM == Name)
+        'X-M2M-NM': optionData.mgmtCmd_prefix + optionData.node_ID,	//해당 요청으로 생성하게 되는 자원의 이름 (NM == Name)
         'Content-Type': 'application/json;ty=12'
       }
     },
@@ -170,7 +170,7 @@ httpReq({
   }
   console.log('content-location: '+ result.headers['content-location']);		//생성된 자원의 URI
   if(result.headers){
-    console.log(colors.green('4. content Instance 주기적 생성 시작'));
+    console.log(colors.green('5. content Instance 주기적 생성 시작'));
     setContentInterval();
   }
 }).catch(function(err){
@@ -180,7 +180,7 @@ httpReq({
 
 function setContentInterval(){
   setInterval(function(){
-    // 3. content Instance 생성
+    // 5. content Instance 생성
     var value = Math.floor(Math.random() * 40);
     httpReq({ 
       options : {
@@ -216,7 +216,7 @@ function updateExecInstance(ei){
     options: {
       host : 'sandbox.sktiot.com',
       port: '9000',
-      path : '/ThingPlug/mgmtCmd-'+optionData.mgmtCmd_name+'/execInstance-'+ei,
+      path : '/ThingPlug/mgmtCmd-' + optionData.mgmtCmd_prefix + optionData.node_ID + '/execInstance-'+ei,
       method: 'PUT',
       headers : {
         Accept: 'application/json',
