@@ -57,7 +57,6 @@ httpReq({
         'X-M2M-NM': optionData.node_ID,								//해당 요청으로 생성하게 되는 자원의 이름 (NM == Name)
         'passCode': optionData.passCode,
         'Accept': 'application/json',
-        // 'Content-Type': 'application/vnd.onem2m-res+xml;ty=16',
         'Content-Type': 'application/json;ty=16'
       }
     },
@@ -66,7 +65,7 @@ httpReq({
       csi : optionData.node_ID, //등록하는 CSE의 식별자 (CSE-ID == csi)
       poa : ['MQTT|'+optionData.node_ID], //등록하는 CSE의 물리적 접근 식별자 또는 주소 (pointOfAccess == poa)
       rr : true,  //등록하는 CSE가 접근하는 한 객체 여부 표기 (requestReachability == rr)
-      nl : optionData.node_ID
+      nl : optionData.nodeRI
     }
   });
   
