@@ -54,8 +54,9 @@ httpReq({
       }
     },
 		body : {
-			exra : 'request',
-			exe : true
+			exra : 'testArgument',			//제어 요청(일반적으로 원격 장치를 RPC호출)을 위한 Argument 정의 (exra == execReqArgs) 
+			exe : true						//제어 요청 Trigger 속성으로 해당 속성은 (True/False로 표현) (exe == execEnabler)
+											//해당 속성을 True로 지정하고 PUT 요청을 ThingPlug에 전송하면 제어 동작을 진행함
 		}
   });
 }).then(function(result){
