@@ -18,7 +18,7 @@ function randomInt (low, high) {
 // 1. ContentInstance를 활용한 서버에 저장된 센서 값 조회(Retrieve)
 httpReq({ 
   options: {
-    host : 'sandbox.sktiot.com',
+    host : '211.115.15.160',
     port: '9000',
     path : '/ThingPlug/remoteCSE-'+ optionData.node_ID+ '/container-'+optionData.container_name+'/latest',
     method: 'GET',
@@ -41,7 +41,7 @@ httpReq({
 
   return httpReq({ // 2. mgmtCmd 요청
     options: {
-      host : 'sandbox.sktiot.com',
+      host : '211.115.15.160',
       port: '9000',
       path : '/ThingPlug/mgmtCmd-' + optionData.mgmtCmd_prefix + optionData.node_ID,
       method: 'PUT',
@@ -50,7 +50,7 @@ httpReq({
         uKey : optionData.uKey,
         'X-M2M-Origin': optionData.app_ID,
         'X-M2M-RI': randomInt(100000, 999999),
-				'Content-Type': 'application/json;ty=8',
+				'Content-Type': 'application/json',
       }
     },
 		body : {
@@ -78,9 +78,9 @@ httpReq({
 function checkMgmtResults(resourceID){
   return httpReq({ //  execInstance 리소스 조회
      options: {
-       host : 'sandbox.sktiot.com',
+       host : '211.115.15.160',
        port: '9000',
-       path : '/ThingPlug/mgmtCmd-'+ optionData.mgmtCmd_prefix + optionData.nodeID +'/execInstance-'+ resourceID,
+       path : '/ThingPlug/mgmtCmd-'+ optionData.mgmtCmd_prefix + optionData.node_ID +'/execInstance-'+ resourceID,
        method: 'GET',
        headers : {
          Accept: 'application/json',
