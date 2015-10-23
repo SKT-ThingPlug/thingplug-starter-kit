@@ -6,7 +6,6 @@ Application에서 data에 접근하기 위해서는 uKey만을 사용합니다.
 'use strict';
 
 var colors = require('colors');
-var parseString = require('xml2js').parseString;
 var httpReq = require('./promise-http').request;
 
 var optionData = require('./config');
@@ -19,12 +18,12 @@ function randomInt (low, high) {
 // 1. ContentInstance를 활용한 서버에 저장된 센서 값 조회(Retrieve)
 httpReq({ 
   options: {
-    host : 'sandbox.sktiot.com',
+    host : '211.115.15.160',
     port: '9000',
-    path : '/ThingPlug/remoteCSE-'+ optionData.cse_ID+ '/container-'+optionData.container_name+'/latest',
+    path : '/ThingPlug/remoteCSE-'+ optionData.node_ID+ '/container-'+optionData.container_name+'/latest',
     method: 'GET',
     headers : {
-      Accept: 'application/xml',
+      Accept: 'application/json',
       locale: 'ko',
       uKey : optionData.uKey,
       'X-M2M-RI': randomInt(100000, 999999),
@@ -32,51 +31,46 @@ httpReq({
     }
   }
 }).then(function(result){
-  console.log(colors.blue('1. latest contentInstance 조회'));
+  console.log(colors.green('1. latest contentInstance 조회'));
   if(result.data){
-    parseString(result.data,function(err, xmlObj){
-      console.log('content : ' + xmlObj['m2m:cin']['con'][0]);
-      console.log('resouceId : ' + xmlObj['m2m:cin']['ri'][0]);
-      console.log('생성일 : '+ xmlObj['m2m:cin']['ct'][0]);
-    });
+		var data = JSON.parse(result.data);
+		console.log('content : ' + data.con);
+		console.log('resouceId : ' + data.ri);
+		console.log('생성일 : '+ data.ct);
   }
 
-  return httpReq({ // 2. mgmCmd 요청
+  return httpReq({ // 2. mgmtCmd 요청
     options: {
-      host : 'sandbox.sktiot.com',
+      host : '211.115.15.160',
       port: '9000',
-      path : '/ThingPlug/remoteCSE-'+ optionData.cse_ID+ '/mgmtCmd-'+optionData.mgmtCmd_name+'?rty=8',
-      method: 'POST',
+      path : '/ThingPlug/mgmtCmd-' + optionData.mgmtCmd_prefix + optionData.node_ID,
+      method: 'PUT',
       headers : {
-        Accept: 'application/xml',
+        Accept: 'application/json',
         uKey : optionData.uKey,
         'X-M2M-Origin': optionData.app_ID,
         'X-M2M-RI': randomInt(100000, 999999),
-        'Content-Type': 'application/xml'
+				'Content-Type': 'application/json',
       }
     },
-    body : '<?xml version="1.0" encoding="UTF-8"?>'
-      +'<m2m:mgc '
-      +'    xmlns:m2m="http://www.onem2m.org/xml/protocols" '
-      +'    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
-      +'    <exra>request</exra>'
-      +'</m2m:mgc>'
+		body : {
+			exra : 'testArgument',			//제어 요청(일반적으로 원격 장치를 RPC호출)을 위한 Argument 정의 (exra == execReqArgs) 
+			exe : true						//제어 요청 Trigger 속성으로 해당 속성은 (True/False로 표현) (exe == execEnabler)
+											//해당 속성을 True로 지정하고 PUT 요청을 ThingPlug에 전송하면 제어 동작을 진행함
+		}
   });
 }).then(function(result){
-  console.log(colors.blue('2. mgmtCmd 제어 요청'));
-  
+  console.log(colors.green('2. mgmtCmd 제어 요청'));
   if(result.data){
-    parseString(result.data,function(err, xmlObj){
-      console.log('content-location: '+ result.headers['content-location']);
-      console.log('resouceId : ' + xmlObj['m2m:exin']['ri'][0]);
-      console.log('execStatus : ' + xmlObj['m2m:exin']['exs'][0]);
-      return checkMgmtResults(xmlObj['m2m:exin']['ri'][0]);
-    });
+		var data = JSON.parse(result.data);
+		console.log('resourceID : '+data.exin[0].ri);
+		console.log('execStatus : '+data.exin[0].exs);
+		
+		checkMgmtResults(data.exin[0].ri);
   }
   
-  
 }).catch(function(err){
-  console.log(colors.red('2. mgmtCmd 제어 요청 에러'));
+  // console.log(colors.red('2. mgmtCmd 제어 요청 에러'));
   console.log(err);
   
 });
@@ -84,32 +78,30 @@ httpReq({
 function checkMgmtResults(resourceID){
   return httpReq({ //  execInstance 리소스 조회
      options: {
-       host : 'sandbox.sktiot.com',
+       host : '211.115.15.160',
        port: '9000',
-       path : '/ThingPlug/remoteCSE-'+ optionData.cse_ID+ '/mgmtCmd-'+optionData.mgmtCmd_name+'/execInstance-'+ resourceID,
+       path : '/ThingPlug/mgmtCmd-'+ optionData.mgmtCmd_prefix + optionData.node_ID +'/execInstance-'+ resourceID,
        method: 'GET',
        headers : {
-         Accept: 'application/xml',
+         Accept: 'application/json',
          locale: 'ko',
          uKey : optionData.uKey,
          'X-M2M-RI': '12345',
-         'X-M2M-Origin': 'ThingPlug',
-         'Content-Type': 'application/xml'
+         'X-M2M-Origin': 'ThingPlug'
        }
      }
    }).then(function(result){
-     console.log(colors.blue('#. execInstance 리소스 조회'));
+     console.log(colors.green('#. execInstance 리소스 조회'));
      if(result.data){
-       parseString(result.data,function(err, xmlObj){
-         console.log('resouceId : ' + xmlObj['m2m:exin']['ri'][0]);
-         console.log('execStatus : ' + xmlObj['m2m:exin']['exs'][0]);
-				 
-				 if(xmlObj['m2m:exin']['exs'][0] == '2'){
-					 setTimeout(function(){
-						 checkMgmtResults(resourceID);
-					 },1000);
-				 }
-       });
+			 var data = JSON.parse(result.data);
+			 console.log('resourceID : ' + data.ri);
+			 console.log('execStatus : ' + data.exs);
+			 
+			 if(data.exs === 2){
+		 		 setTimeout(function(){
+					 checkMgmtResults(resourceID);
+				 },1000);
+			 }
      }
    }).catch(function(err){
      console.log(err); 	

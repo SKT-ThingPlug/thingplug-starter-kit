@@ -13,11 +13,12 @@ exports.request = function(args){
           data: chunk
         });
       });
-      if(res.statusCode!==200 && res.statusCode!==201 && res.statusCode!==403){
+      if(res.statusCode!==200 && res.statusCode!==201 && res.statusCode!==409){
         reject({ 
           statusCode : res.statusCode,
           error: 'statusCode is '+res.statusCode,
-          options: args.options
+          options: args.options,
+          responseHeader : res.headers
         });
       }
     });
@@ -28,7 +29,11 @@ exports.request = function(args){
       });
     });
     if(args.body){
-      req.write(args.body);
+      if(typeof args.body == 'string'){
+        req.write(args.body);
+      }else{
+        req.write(JSON.stringify(args.body));
+      }
     }
     req.end();
   });
