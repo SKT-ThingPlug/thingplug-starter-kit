@@ -21,7 +21,7 @@ function randomInt (low, high) {
 // 1. node 생성
 httpReq({ 
   options: {
-    host : '211.115.15.160',
+    host : 'sandbox.sktiot.com',
     port: '9000',
     path : '/ThingPlug',
     method: 'POST',
@@ -47,7 +47,7 @@ httpReq({
   // 2. remoteCSE생성 요청(기기등록)
   return httpReq({ 
     options: {
-      host : '211.115.15.160',
+      host : 'sandbox.sktiot.com',
       port: '9000',
       path : '/ThingPlug',														//rty는 생성하고자 하는 Resource Type의 식별자 (rty == 16은 remoteCSE를 의미함)
       method: 'POST',
@@ -82,7 +82,7 @@ httpReq({
   // MQTT Connect
   return new Promise(function(resolve, reject){
     var mqtt = require('mqtt');
-    var client  = mqtt.connect('mqtt://211.115.15.160');
+    var client  = mqtt.connect('mqtt://sandbox.sktiot.com');
    
     client.on('connect', function () {
       console.log('### mqtt connected ###');
@@ -113,7 +113,7 @@ httpReq({
   // 3. container 생성 요청
   return httpReq({ 
     options: {
-      host : '211.115.15.160',
+      host : 'sandbox.sktiot.com',
       port: '9000',
       path : '/ThingPlug/remoteCSE-'+ optionData.node_ID,				//rty == 3은 생성하고자 하는 container 자원을 의미함
       method: 'POST',
@@ -143,7 +143,7 @@ httpReq({
   // 4. 장치 제어를 위한 device mgmtCmd 리소스 생성
   return httpReq({
     options: {
-      host : '211.115.15.160',
+      host : 'sandbox.sktiot.com',
       port: '9000',
       path : '/ThingPlug',				//rty == 12는 생성하고자 하는 mgmtCmd 자원을 의미함
       method: 'POST',
@@ -184,7 +184,7 @@ function setContentInterval(){
     var value = Math.floor(Math.random() * 40);
     httpReq({ 
       options : {
-        host : '211.115.15.160',
+        host : 'sandbox.sktiot.com',
         port: '9000',
         path : '/ThingPlug/remoteCSE-'+ optionData.node_ID+ '/container-'+optionData.container_name,		//rty == 4는 생성하고자 하는 contentInstance 자원을 의미함
         method: 'POST',
@@ -214,7 +214,7 @@ function setContentInterval(){
 function updateExecInstance(ei){
   httpReq({ // ### execInstance Update(PUT) - execStatus 변경됨
     options: {
-      host : '211.115.15.160',
+      host : 'sandbox.sktiot.com',
       port: '9000',
       path : '/ThingPlug/mgmtCmd-' + optionData.mgmtCmd_prefix + optionData.node_ID + '/execInstance-'+ei,
       method: 'PUT',
