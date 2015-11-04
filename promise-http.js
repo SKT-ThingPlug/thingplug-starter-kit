@@ -10,7 +10,8 @@ exports.request = function(args){
         resolve({
           statusCode : res.statusCode,
           headers : res.headers,
-          data: chunk
+          data: chunk,
+          requestArgs : args
         });
       });
       if(res.statusCode!==200 && res.statusCode!==201 && res.statusCode!==409){
