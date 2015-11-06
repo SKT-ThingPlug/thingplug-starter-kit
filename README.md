@@ -1,6 +1,7 @@
 ![ThingPlug logo](https://github.com/SKT-ThingPlug/thingplug-starter-kit/raw/master/images/thingplug--onem2m-logo.png)
 # SKT ThingPlug oneM2M Starter Kit
-본 Starter Kit은 SKT의 ThingPlug oneM2M API를 이용하여 IoT 서비스를 제작하는 가장 기초적인 방법을 구현해둔 프로젝트 입니다. SKT의 ThingPlug oneM2M을 이용한 서비스 개발을 Starter Kit에서부터 시작해보세요.
+본 Starter Kit은 SKT의 ThingPlug에서 제공하는 IoT 국제 표준인 oneM2M API를 이용하여 IoT 서비스를 제작하는 가장 기초적인 방법을 구현해둔 프로젝트 입니다.
+본 프로젝트를 통하여 SKT의 ThingPlug oneM2M API를 활용하는 방법을 쉽게 이해하고, 다양한 IoT 서비스 개발을 Starter Kit에서부터 시작해보세요.
 
 ## oneM2M의 구성과 Starter Kit의 목적
 oneM2M에서는 역할에 따라 구성원을 다음 세 가지로 구분할 수 있습니다.
@@ -9,9 +10,11 @@ oneM2M에서는 역할에 따라 구성원을 다음 세 가지로 구분할 수
 
 - 애플리케이션 클라이언트
 - 디바이스 클라이언트
-- oneM2M
+- oneM2M API를 제공하는 ThingPlug 서버
 
-애플리케이션과 디바이스는 직접적으로 통신하지 않고 각 구성원들은 기본적으로 REST API를 통해 oneM2M과 통신을 하게 됩니다. oneM2M은 SKT의 ThingPlug가 제공을 해주니 여러분은 디바이스와 애플리케이션만 구현하면 되므로 제품 개발 시 제품자체에 더욱 집중 할 수 있습니다. 본 Starer Kit은 바로 이 두 가지, 애플리케이션과 디바이스의 기본적인 역할을 구현해 놓은 것입니다. 따라서 이 Starter Kit은 ThingPlug의 oneM2M을 직접 경험해 봄으로써 oneM2M을 이해하고 바로 제품개발을 시작할 수 있는 시작점을 제공하는데 그 목적이 있습니다.
+애플리케이션과 디바이스는 직접적으로 통신하지 않고 각 구성원들은 기본적으로 REST API를 통해 oneM2M 서버와 통신을 하게 됩니다. oneM2M에서 정의한 IoT의 공통적인 기능은 ThingPlug가 제공을 해주기 때문에 디바이스와 애플리케이션의 개발자들이 좀 더 쉽게 IoT 서비스를 개발할 수 있는 환경을 제공합니다.
+
+본 Starer Kit은 바로 이 두 가지, 애플리케이션과 디바이스가 최소한의 IoT 서비스 기능을 할 수 있도록 기본적인 역할을 구현해 놓은 것입니다. 따라서 이 Starter Kit은 ThingPlug의 oneM2M을 직접 경험해 봄으로써 oneM2M을 이해하고 바로 제품개발을 시작할 수 있는 시작점을 제공하는데 그 목적이 있다고 할 수 있습니다.
 
 ## Starter Kit 실행절차 요약
 다음 절차를 따르면 간편하게 Starter Kit을 실행할 수 있습니다.
@@ -61,7 +64,7 @@ Starter Kit이 실질적으로 동작하기 위해서는 개발자 계정정보 
 
 #### CSE_ID란?
 
-> TODO: cse_id prefix에 대한 내용이 공유되면 해당 내용을 변경 
+> TODO: cse_id prefix에 대한 내용이 공유되면 해당 내용을 변경
 
 cse_ID는 디바이스를 oneM2M에서 구분하기 위해 주민번호처럼 디바이스마다 부여되는 고유의 아이디입니다. 스타터킷을 위한 CSE_ID는 `000.000.000.000.xxxx`이며 마지막 xxx가 시리얼번호에 해당합니다. 다른 디바이스와 겹치지 않기 위해 스타터킷에서는  핸드폰 번호를 입력해주세요.
 
@@ -72,12 +75,12 @@ cse_ID는 디바이스를 oneM2M에서 구분하기 위해 주민번호처럼 �
 
 ```javascript
 module.exports = {
-  uKey : 'USER_KEY_FROM_SANDBOX.SKIOT.COM', // 사용자 인증키 : https://sandbox.sktiot.com/IoTPortal/mypage/myiot
-  cse_ID : '1.2.481.1.900.90.01000000000', // Device ID (본 예제에서는 맨 뒷자리를 핸드폰 번호 사용 권장)
+  uKey : 'USER_KEY_FROM_SANDBOX.SKIOT.COM', // Thingplug(https://sandbox.sktiot.com) 로그인 후, `마이페이지`에 있는 사용자 인증키
+  node_ID : '0.2.481.1.101.01000000000', // Device 구분을 위한 ID  (본 예제에서는 맨 뒷자리를 핸드폰 번호 사용 권장)
   passCode : '000101', // ThingPlug에 Device등록 시 사용할 Device의 비밀번호 (본 예제에서는 생년월일 사용 권장)
   app_ID : 'myApplication', //Application의 구분을 위한 ID
-  container_name:'plugtest01', // starter kit에서 생성하고 사용할 container 이름 (임의지정)
-  mgmtCmd_name : 'mgmtCmd_1', // starter kit에서 생성하고 사용할 제어 명령 이름 (임의지정)
+  container_name:'myContainer', // starter kit에서 생성하고 사용할 container 이름 (임의지정)
+  mgmtCmd_prefix : 'myMGMT', // starter kit에서 생성하고 사용할 제어 명령 이름 접두사 (임의지정)
   cmdType : 'senser_1' // starter kit에서 사용할 제어 타입 (임의지정)
 };
 ```
@@ -103,7 +106,7 @@ content-location: http://sandbox.sktiot.com:9000/ThingPlug/remoteCSE-000.0000.00
 ```
 
 #### Device가 하는 일
- 
+
  구분  | 설명 | HTTP Method
 -------|----|---
 1. remoteCSE 생성 | remoteCSE ID와 passCode를 oneM2M서버에 등록합니다. | POST
@@ -112,19 +115,19 @@ content-location: http://sandbox.sktiot.com:9000/ThingPlug/remoteCSE-000.0000.00
 4. Content Instance 생성 | 일반적으로 센서의 측정값을 지정한 컨테이너에 기록합니다. | POST
 5. MQTT 연결 | 현재 ThingPlug는 Application에서 oneM2M에게 전달된 제어명령(mgmtCmd) execInstance를 전달받는 방법으로 MQTT를 사용할 수 있습니다.(oneM2M표준사항은 아님) ThingPlug MQTT와 연결합니다. | -
 6. execInstance 갱신 | MQTT등을 통해 전달받은 execInstance의 결과를 갱신합니다. | PUT
-  
+
 ### ThingPlug에 내 계정에 Device를 등록
 애플리케이션에서 ThingPlug oneM2M REST API를 통해 데이터를 필요에 따라 제어명령을 보내기 위해서는 먼저 ThingPlug 사이트에 위 device(생성된 remoteCSE)를 등록해야합니다.
 
 - [ThingPlug](https://sandbox.sktiot.com) 로그인 후 "마이페이지 > 나의 디바이스 > 디바이스 등록" 페이지로 이동합니다.
 - 위에서 device 실행 시 사용한 `config.js`의 디바이스 아이디(cse_ID)와 passCode를 개별등록에 입력하고 `디바이스 정보확인` 버튼을 누릅니다.
-- 필수정보 입력화면에 내용을 해당 내용을 넣어준 후 하단 '저장'버튼을 누르면 ThingPlug에 Device 등록이 완료됩니다. 
+- 필수정보 입력화면에 내용을 해당 내용을 넣어준 후 하단 '저장'버튼을 누르면 ThingPlug에 Device 등록이 완료됩니다.
 
 ## Application 실행
 `node application.js` 명령어로 application을 실행합니다. (Application 실행하기 전에 `device.js`가 동작하는 상태로 유지합니다. 따라서 `device.js` 실행을 종료하지 않고 새로운 terminal(커맨드창)을 열어 실행하세요. 계속 실행이 유지되는 `device.js`와 달리 본 스타트업킷에서는 편의상 `application.js`는 한번 실행 후 종료하도록 되어있습니다.)
 
 ```
-≫ node application.js 
+≫ node application.js
 1. latest contentInstance 조회
 content : 13
 resouceId : CI00000000000000034932
@@ -175,4 +178,4 @@ device먼저 실행한 후 application.js를 실행해야합니다. [config.js �
 아닙니다. 디바이스마다 최초 1회만 CSE_ID를 등록하면 됩니다. 본 스타터킷에서는 디바이스 실행 시 매번 CSE_ID를 등록하도록 되어 있습니다. 이 경우에도 문제가 되는 것은 아닙니다. 단 이 경우 403 Fobidden Status와 함께 device key가 바뀝니다.
 
 #### 마이페이지에 사용자 인증키가 없는데요?
-ThingPlug 회원가입 입력양식에 있는 디바이스 연동 프로토콜 선택을 반드시 HTTP로 선택해야 합니다. 그렇지 않을 경우 oneM2M API를 이용할 수 없습니다. 가입시에만 선택이 가능하기 때문에 새로운 아이디로 새 계정을 만들고 가입 입력양식에서 꼭 HTTP로 선택해주세요. 
+ThingPlug 회원가입 입력양식에 있는 디바이스 연동 프로토콜 선택을 반드시 HTTP로 선택해야 합니다. 그렇지 않을 경우 oneM2M API를 이용할 수 없습니다. 가입시에만 선택이 가능하기 때문에 새로운 아이디로 새 계정을 만들고 가입 입력양식에서 꼭 HTTP로 선택해주세요.
