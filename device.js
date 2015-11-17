@@ -38,7 +38,7 @@ httpReq({
   }
 }).then(function(result){
   console.log(colors.blue('1. node 생성 요청 내용'));
-  console.log(result.requestArgs);
+  //console.log(result.requestArgs);
   console.log(colors.green('1. node 생성 결과'));
   if(result.statusCode == 409){
     console.log('이미 생성된 node resource ID 입니다.');
