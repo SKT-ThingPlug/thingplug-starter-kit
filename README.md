@@ -8,13 +8,13 @@ oneM2M에서는 역할에 따라 구성원을 다음 세 가지로 구분할 수
 
 ![oneM2M 구성과 주요 요청](https://github.com/SKT-ThingPlug/thingplug-starter-kit/raw/master/images/sequence_flow.png)
 
-- 애플리케이션 클라이언트
-- 디바이스 클라이언트
-- oneM2M API를 제공하는 ThingPlug 서버
+- 애플리케이션 클라이언트 (Application)
+- 디바이스 클라이언트 (Device)
+- oneM2M API를 제공하는 ThingPlug 서버 (ThingPlug)
 
-애플리케이션과 디바이스는 직접적으로 통신하지 않고 각 구성원들은 기본적으로 REST API를 통해 oneM2M 서버와 통신을 하게 됩니다. oneM2M에서 정의한 IoT의 공통적인 기능은 ThingPlug가 제공을 해주기 때문에 디바이스와 애플리케이션의 개발자들이 좀 더 쉽게 IoT 서비스를 개발할 수 있는 환경을 제공합니다.
+애플리케이션과 디바이스는 직접적으로 통신하지 않고 각 구성원들은 기본적으로 ThingPlug가 제공하는 oneM2M 표준 기반의 REST API를 통해 oneM2M 서버와 통신을 하게 됩니다. 해당 API를 통해 제공되는 IoT의 공통적인 기능(예, 데이터 저장, 장치 관리, 장치 등록 등)은 디바이스와 애플리케이션의 개발자들이 좀 더 쉽게 IoT 서비스를 개발할 수 있는 환경을 제공합니다.
 
-본 Starer Kit은 바로 이 두 가지, 애플리케이션과 디바이스가 최소한의 IoT 서비스 기능을 할 수 있도록 기본적인 역할을 구현해 놓은 것입니다. 따라서 이 Starter Kit은 ThingPlug의 oneM2M을 직접 경험해 봄으로써 oneM2M을 이해하고 바로 제품개발을 시작할 수 있는 시작점을 제공하는데 그 목적이 있다고 할 수 있습니다.
+본 Starer Kit이 제공되는 목적은 첫째로는 애플리케이션과 디바이스가 최소한의 IoT 서비스 기능을 할 수 있도록 ThingPlug 서버가 제공하는 API를 활용하는 방법을 익히고, 두번째로는 ThingPlug에서 제공하는 oneM2M을 직접 경험해 봄으로써 oneM2M 표준을 이해하는 것입니다.
 
 ## Starter Kit 실행절차 요약
 다음 절차를 따르면 간편하게 Starter Kit을 실행할 수 있습니다.
@@ -34,7 +34,7 @@ Starter Kit을 실행하기 위해서는 다음과 같은 도구가 설치되어
 - [Node.js](https://nodejs.org) : 공식 사이트에서 설치 패키지를 다운받을 수 있습니다.
 
 > 주의!
-ThingPlug oneM2M을 이용하기 위해서는 ThingPlug 계정이 필요합니다. ThingPlug 회원가입시 사용할 디바이스 연동 프로토콜을 반드시 HTTP로 선택해야합니다. HTTP로 선택하지 않고 이미 계정을 만드셨다면 다른 계정을 하나 더 만들어서 진행하세요.
+ThingPlug oneM2M을 이용하기 위해서는 ThingPlug 계정이 필요합니다. ThingPlug 회원가입 시 사용할 디바이스 연동 프로토콜을 반드시 HTTP로 선택해야 합니다. HTTP로 선택하지 않고 이미 계정을 만드셨다면 다른 계정을 하나 더 만들어서 진행하세요.
 
 #### 코드 복사
 
@@ -46,8 +46,8 @@ git clone git@github.com:SKT-ThingPlug/thingplug-starter-kit.git
 
 복사된 폴더 안을 살펴보면 다음과 같은 주요파일이 있습니다.
 
-- `device.js` : 실제 IoT Device에서 구동되는 코드 입니다. Node.js로 구현되어 있어 Node.js가 실행 가능한 컴퓨터에서 실행가능하며 [BeegleBone Black](http://beagleboard.org/black) 같이 Node.js를 구동할 수 있는 하드웨어 플랫폼에서도 직접 실행이 가능합니다.
-- `application.js` : `device.js`에서 ThingPlug로 전송한 데이터를 이용하는 주체로써 일반적으로 웹이나 앱에 해당합니다. 사용자와의 접점으로 데이터를 사용자에게 보여주거나 사용자로부터 어떠한 명령을 받아 oneM2M서버를 통해 실제 device를 제어하기도 합니다.
+- `device.js` : 실제 IoT Device에서 구동이 가능한 코드 입니다. Node.js로 구현되어 있어 Node.js가 실행 가능한 컴퓨터에서 실행가능하며 [BeegleBone Black](http://beagleboard.org/black) 같이 Node.js를 구동할 수 있는 IoT Device에서 직접 실행이 가능합니다.
+- `application.js` : `device.js`에서 ThingPlug로 전송한 데이터를 이용하는 주체로써 일반적으로 웹이나 앱에 해당합니다. 사용자와의 접점으로 데이터를 사용자에게 보여주거나 사용자로부터 어떠한 명령을 받아 ThingPlug 서버를 통해 실제 device를 제어하기도 합니다.
 - `config.js` : 개발자 인증키와 디바이스 ID등 스타터킷 실행에 앞서 필요한 환경 값을 가지고 있습니다. 각자의 상황에 맞게 수정이 필요합니다. [config.js 수정참고 섹션](https://github.com/SKT-ThingPlug/thingplug-starter-kit#configjs-수정)
 
 
@@ -62,16 +62,9 @@ npm install
 ### config.js 수정
 Starter Kit이 실질적으로 동작하기 위해서는 개발자 계정정보 및 디바이스 정보를 개발자 상황에 맞게 수정해야합니다. `config.js_sample`파일을 `config.js`파일로 복사한 후 `config.js`를 에디터에서 열고 각 항목 오른쪽에 달린 주석 설명과 아래 설명을 참고하여 수정하세요.
 
-#### CSE_ID란?
+#### CSE_ID 란?
 
-> TODO: cse_id prefix에 대한 내용이 공유되면 해당 내용을 변경
-
-cse_ID는 디바이스를 oneM2M에서 구분하기 위해 주민번호처럼 디바이스마다 부여되는 고유의 아이디입니다. 스타터킷을 위한 CSE_ID는 `000.000.000.000.xxxx`이며 마지막 xxx가 시리얼번호에 해당합니다. 다른 디바이스와 겹치지 않기 위해 스타터킷에서는  핸드폰 번호를 입력해주세요.
-
-```
-000.0000.00000.0000.00000
-(제조사.모델명.OOO.OOO.시리얼번호)
-```
+CSE_ID는 디바이스를 oneM2M에서 구분하기 위해 주민번호처럼 디바이스마다 부여되는 고유의 아이디입니다. 스타터킷을 위한 CSE_ID는 `0.2.481.1.101.[Personal Phone Number]`이며 마지막 [Personal Phone Number]가 시리얼번호에 해당합니다. 다른 디바이스와 겹치지 않기 위해 Starter Kit을 실행하시고자 하는 개발자의 핸드폰 번호를 입력해주세요.
 
 ```javascript
 module.exports = {
@@ -91,17 +84,19 @@ module.exports = {
 ```
 $ node device
 ### ThingPlug Device ###
-1. remoteCES 생성 결과
+1. node 생성 결과
+
+2. remoteCES 생성 결과
 다비이스 키 : THIS=IS=A=SAMPLE=KEY=BVNUFtQTVYbkU2WVkxUkQ0R0ZLNCs5eTNFcUEyY0Voa29CTGZvR0tFcFlxWk1UnJJZQ==
 content-location: http://sandbox.sktiot.com:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000
 ### mqtt connected ###
-2. container 생성 결과
+3. container 생성 결과
 content-location: http://sandbox.sktiot.com:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000/container-plugtest01
-3. mgmtCmd 생성 결과
+4. mgmtCmd 생성 결과
 content-location: http://sandbox.sktiot.com:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000/mgmtCmd-mgmtCmd_1
-4. content Instance 주기적 생성 시작
-센서 content : 33
-센서 content : 10
+5. content Instance 주기적 생성 시작
+content : 33, resourceID : CI00000000000000034932
+content : 10, resourceID : CI00000000000000034933
 ...
 ```
 
@@ -109,12 +104,13 @@ content-location: http://sandbox.sktiot.com:9000/ThingPlug/remoteCSE-000.0000.00
 
  구분  | 설명 | HTTP Method
 -------|----|---
-1. remoteCSE 생성 | remoteCSE ID와 passCode를 oneM2M서버에 등록합니다. | POST
-2. 컨테이너 생성 | 데이터를 저장해둘 container를 생성합니다. 파일시스템의 폴더와 같은 역할을 합니다. | POST
-3. mgmtCmd 생성 | 디바이스에서 받아들일 수 있는 제어 명령어를 생성 합니다. 이 생성된 명령어 이름은 Application이 제어 명령을 내릴 때 사용합니다. | POST
-4. Content Instance 생성 | 일반적으로 센서의 측정값을 지정한 컨테이너에 기록합니다. | POST
-5. MQTT 연결 | 현재 ThingPlug는 Application에서 oneM2M에게 전달된 제어명령(mgmtCmd) execInstance를 전달받는 방법으로 MQTT를 사용할 수 있습니다.(oneM2M표준사항은 아님) ThingPlug MQTT와 연결합니다. | -
-6. execInstance 갱신 | MQTT등을 통해 전달받은 execInstance의 결과를 갱신합니다. | PUT
+1. node 생성 | 물리적 Device를 등록합니다. | POST
+2. remoteCSE 생성 | remoteCSE ID와 passCode를 oneM2M서버에 등록합니다. | POST
+3. 컨테이너 생성 | 데이터를 저장해둘 container를 생성합니다. 파일시스템의 폴더와 같은 역할을 합니다. | POST
+4. mgmtCmd 생성 | 디바이스에서 받아들일 수 있는 제어 명령어를 생성 합니다. 이 생성된 명령어 이름은 Application이 제어 명령을 내릴 때 사용합니다. | POST
+5. Content Instance 생성 | 일반적으로 센서의 측정값을 지정한 컨테이너에 기록합니다. | POST
+6. MQTT 연결 | 현재 ThingPlug는 Application에서 oneM2M에게 전달된 제어명령(mgmtCmd) execInstance를 전달받는 방법으로 MQTT를 사용할 수 있습니다.(oneM2M표준사항은 아님) ThingPlug MQTT와 연결합니다. | -
+7. execInstance 갱신 | MQTT등을 통해 전달받은 execInstance의 결과를 갱신합니다. | PUT
 
 ### ThingPlug에 내 계정에 Device를 등록
 애플리케이션에서 ThingPlug oneM2M REST API를 통해 데이터를 필요에 따라 제어명령을 보내기 위해서는 먼저 ThingPlug 사이트에 위 device(생성된 remoteCSE)를 등록해야합니다.
