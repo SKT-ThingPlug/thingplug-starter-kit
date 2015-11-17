@@ -6,7 +6,7 @@
 ## oneM2M의 구성과 Starter Kit의 목적
 oneM2M에서는 역할에 따라 구성원을 다음 세 가지로 구분할 수 있습니다.
 
-![oneM2M 구성과 주요 요청](https://github.com/SKT-ThingPlug/thingplug-starter-kit/raw/master/images/oneM2M.png)
+![oneM2M 구성과 주요 요청](https://github.com/SKT-ThingPlug/thingplug-starter-kit/raw/master/images/sequence_flow.png)
 
 - 애플리케이션 클라이언트
 - 디바이스 클라이언트
