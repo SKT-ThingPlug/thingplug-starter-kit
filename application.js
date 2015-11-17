@@ -16,9 +16,9 @@ function randomInt (low, high) {
 }
 
 // 1. ContentInstance를 활용한 서버에 저장된 센서 값 조회(Retrieve)
-httpReq({ 
+httpReq({
   options: {
-    host : '211.115.15.160',
+    host : 'sandbox.sktiot.com',
     port: '9000',
     path : '/ThingPlug/remoteCSE-'+ optionData.node_ID+ '/container-'+optionData.container_name+'/latest',
     method: 'GET',
@@ -41,7 +41,7 @@ httpReq({
 
   return httpReq({ // 2. mgmtCmd 요청
     options: {
-      host : '211.115.15.160',
+      host : 'sandbox.sktiot.com',
       port: '9000',
       path : '/ThingPlug/mgmtCmd-' + optionData.mgmtCmd_prefix + optionData.node_ID,
       method: 'PUT',
@@ -54,7 +54,7 @@ httpReq({
       }
     },
 		body : {
-			exra : 'testArgument',			//제어 요청(일반적으로 원격 장치를 RPC호출)을 위한 Argument 정의 (exra == execReqArgs) 
+			exra : 'testArgument',			//제어 요청(일반적으로 원격 장치를 RPC호출)을 위한 Argument 정의 (exra == execReqArgs)
 			exe : true						//제어 요청 Trigger 속성으로 해당 속성은 (True/False로 표현) (exe == execEnabler)
 											//해당 속성을 True로 지정하고 PUT 요청을 ThingPlug에 전송하면 제어 동작을 진행함
 		}
@@ -65,20 +65,20 @@ httpReq({
 		var data = JSON.parse(result.data);
 		console.log('resourceID : '+data.exin[0].ri);
 		console.log('execStatus : '+data.exin[0].exs);
-		
+
 		checkMgmtResults(data.exin[0].ri);
   }
-  
+
 }).catch(function(err){
   // console.log(colors.red('2. mgmtCmd 제어 요청 에러'));
   console.log(err);
-  
+
 });
 
 function checkMgmtResults(resourceID){
   return httpReq({ //  execInstance 리소스 조회
      options: {
-       host : '211.115.15.160',
+       host : 'sandbox.sktiot.com',
        port: '9000',
        path : '/ThingPlug/mgmtCmd-'+ optionData.mgmtCmd_prefix + optionData.node_ID +'/execInstance-'+ resourceID,
        method: 'GET',
@@ -96,7 +96,7 @@ function checkMgmtResults(resourceID){
 			 var data = JSON.parse(result.data);
 			 console.log('resourceID : ' + data.ri);
 			 console.log('execStatus : ' + data.exs);
-			 
+
 			 if(data.exs === 2){
 		 		 setTimeout(function(){
 					 checkMgmtResults(resourceID);
@@ -104,6 +104,6 @@ function checkMgmtResults(resourceID){
 			 }
      }
    }).catch(function(err){
-     console.log(err); 	
-  }); 
+     console.log(err);
+  });
 }

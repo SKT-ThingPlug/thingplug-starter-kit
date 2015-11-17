@@ -19,9 +19,9 @@ function randomInt (low, high) {
 
 
 // 1. node 생성
-httpReq({ 
+httpReq({
   options: {
-    host : '211.115.15.160',
+    host : 'sandbox.sktiot.com',
     port: '9000',
     path : '/ThingPlug',
     method: 'POST',
@@ -34,7 +34,7 @@ httpReq({
     }
   },
   body : {
-    ni: optionData.node_ID						//등록한 장치의 식별자 (ni == nodeID) 
+    ni: optionData.node_ID						//등록한 장치의 식별자 (ni == nodeID)
   }
 }).then(function(result){
   console.log(colors.blue('1. node 생성 요청 내용'));
@@ -45,15 +45,15 @@ httpReq({
   }
   optionData.nodeRI = JSON.parse(result.data).ri;
   console.log(colors.yellow('생성 node Resource ID : ') + optionData.nodeRI);
-    
+
   // 2. remoteCSE생성 요청(기기등록)
-  return httpReq({ 
+  return httpReq({
     options: {
-      host : '211.115.15.160',
+      host : 'sandbox.sktiot.com',
       port: '9000',
       path : '/ThingPlug',														//rty는 생성하고자 하는 Resource Type의 식별자 (rty == 16은 remoteCSE를 의미함)
       method: 'POST',
-      headers : {	
+      headers : {
         'X-M2M-Origin': optionData.node_ID,										//해당 요청 메시지 송신자의 식별자
         'X-M2M-RI': randomInt(100000, 999999),									//해당 요청 메시지에 대한 고유 식별자 (RI == Request ID) / 해당 식별자는 CSE가 자동 생성
         'X-M2M-NM': optionData.node_ID,											//해당 요청으로 생성하게 되는 자원의 이름 (NM == Name)
@@ -70,7 +70,7 @@ httpReq({
       nl : optionData.nodeRI
     }
   });
-  
+
 }).then(function(result){
   console.log(colors.green('2. remoteCSE 생성 결과'));
   if(result.statusCode == 409){
@@ -84,20 +84,20 @@ httpReq({
   // MQTT Connect
   return new Promise(function(resolve, reject){
     var mqtt = require('mqtt');
-    var client  = mqtt.connect('mqtt://211.115.15.160');
-   
+    var client  = mqtt.connect('mqtt://sandbox.sktiot.com');
+
     client.on('connect', function () {
       console.log('### mqtt connected ###');
       client.subscribe(optionData.node_ID);
       resolve();
     });
-    
+
     client.on('error', function(error){
       reject(error);
     });
-     
+
     client.on('message', function (topic, message) {
-      // message is Buffer 
+      // message is Buffer
       var msgs = message.toString().split(',');
       console.log(colors.red('#####################################'));
       console.log(colors.red('MQTT 수신 mgmtCmd Name : ') + msgs[0]);
@@ -111,11 +111,11 @@ httpReq({
     });
   });
 }).then(function(result){
-  
+
   // 3. container 생성 요청
-  return httpReq({ 
+  return httpReq({
     options: {
-      host : '211.115.15.160',
+      host : 'sandbox.sktiot.com',
       port: '9000',
       path : '/ThingPlug/remoteCSE-'+ optionData.node_ID,				//rty == 3은 생성하고자 하는 container 자원을 의미함
       method: 'POST',
@@ -140,12 +140,12 @@ httpReq({
     console.log('이미 생성된 container 입니다.');
   }
   console.log('content-location: '+ result.headers['content-location']);		//생성된 자원의 URI
-  
-  
+
+
   // 4. 장치 제어를 위한 device mgmtCmd 리소스 생성
   return httpReq({
     options: {
-      host : '211.115.15.160',
+      host : 'sandbox.sktiot.com',
       port: '9000',
       path : '/ThingPlug',				//rty == 12는 생성하고자 하는 mgmtCmd 자원을 의미함
       method: 'POST',
@@ -166,7 +166,7 @@ httpReq({
     }
   });
 }).then(function(result){
-  console.log(colors.green('4. mgmtCmd 생성 결과'));	
+  console.log(colors.green('4. mgmtCmd 생성 결과'));
   if(result.statusCode == 409){
     console.log('이미 생성된 mgmtCmd 입니다.');
   }
@@ -184,9 +184,9 @@ function setContentInterval(){
   setInterval(function(){
     // 5. content Instance 생성
     var value = Math.floor(Math.random() * 40);
-    httpReq({ 
+    httpReq({
       options : {
-        host : '211.115.15.160',
+        host : 'sandbox.sktiot.com',
         port: '9000',
         path : '/ThingPlug/remoteCSE-'+ optionData.node_ID+ '/container-'+optionData.container_name,		//rty == 4는 생성하고자 하는 contentInstance 자원을 의미함
         method: 'POST',
@@ -216,7 +216,7 @@ function setContentInterval(){
 function updateExecInstance(ei){
   httpReq({ // ### execInstance Update(PUT) - execStatus 변경됨
     options: {
-      host : '211.115.15.160',
+      host : 'sandbox.sktiot.com',
       port: '9000',
       path : '/ThingPlug/mgmtCmd-' + optionData.mgmtCmd_prefix + optionData.node_ID + '/execInstance-'+ei,
       method: 'PUT',
