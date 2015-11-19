@@ -41,7 +41,7 @@ ThingPlug oneM2M을 이용하기 위해서는 ThingPlug 계정이 필요합니�
 코드는 Release된 [Zip파일](https://github.com/SKT-ThingPlug/thingplug-starter-kit/archive/master.zip)을 다운 받아서 임의에 폴더에 압축을 해제하세요. 또는 아래 명령어를 이용하여 github의 master 버전을 clone해도 됩니다.
 
 ```
-git clone git@github.com:SKT-ThingPlug/thingplug-starter-kit.git
+git clone https://github.com/SKT-ThingPlug/thingplug-starter-kit.git
 ```
 
 복사된 폴더 안을 살펴보면 다음과 같은 주요파일이 있습니다.
