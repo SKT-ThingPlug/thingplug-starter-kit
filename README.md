@@ -64,7 +64,7 @@ Starter Kit이 실질적으로 동작하기 위해서는 개발자 계정정보 
 
 #### CSE_ID 란?
 
-CSE_ID는 디바이스를 oneM2M에서 구분하기 위해 주민번호처럼 디바이스마다 부여되는 고유의 아이디입니다. 스타터킷을 위한 CSE_ID는 `0.2.481.1.101.[Personal Phone Number]`이며 마지막 [Personal Phone Number]가 시리얼번호에 해당합니다. 다른 디바이스와 겹치지 않기 위해 Starter Kit을 실행하시고자 하는 개발자의 핸드폰 번호를 입력해주세요.
+CSE_ID는 디바이스를 oneM2M에서 구분하기 위해 주민번호처럼 디바이스마다 부여되는 고유의 식별자입니다. 스타터킷을 위한 CSE_ID는 `0.2.481.1.101.[Personal Phone Number]`이며 마지막 '[Personal Phone Number]'가 시리얼번호에 해당합니다. 다른 디바이스와 겹치지 않기 위해 Starter Kit을 실행하시고자 하는 개발자의 핸드폰 번호를 입력해주세요.
 
 ```javascript
 module.exports = {
@@ -85,18 +85,19 @@ module.exports = {
 $ node device
 ### ThingPlug Device ###
 1. node 생성 결과
-
+생성 node Resource ID : ND00000000000000000270
 2. remoteCES 생성 결과
-다비이스 키 : THIS=IS=A=SAMPLE=KEY=BVNUFtQTVYbkU2WVkxUkQ0R0ZLNCs5eTNFcUEyY0Voa29CTGZvR0tFcFlxWk1UnJJZQ==
-content-location: http://sandbox.sktiot.com:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000
+다비이스 키 : VGJVMDdzVFl2YTBOZFBIMGlwUDdlZksvbVF5dWExRGNHK2cyaW9zOEY4R215QTU0bW9MSmt3QlZYejJ2VGJCbg==
+content-location: /ThingPlug/remoteCSE-0.2.481.1.101.01012341234
 ### mqtt connected ###
 3. container 생성 결과
-content-location: http://sandbox.sktiot.com:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000/container-plugtest01
+content-location: /ThingPlug/remoteCSE-0.2.481.1.101.01012341234/container-myContainer
 4. mgmtCmd 생성 결과
-content-location: http://sandbox.sktiot.com:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000/mgmtCmd-mgmtCmd_1
+content-location: /ThingPlug/mgmtCmd-myMGMT0.2.481.1.101.01012341234
 5. content Instance 주기적 생성 시작
-content : 33, resourceID : CI00000000000000034932
-content : 10, resourceID : CI00000000000000034933
+content : 35, resourceID : CI00000000000000710830
+content : 25, resourceID : CI00000000000000710831
+content : 18, resourceID : CI00000000000000710832
 ...
 ```
 
@@ -105,9 +106,9 @@ content : 10, resourceID : CI00000000000000034933
  구분  | 설명 | HTTP Method
 -------|----|---
 1. node 생성 | 물리적 Device를 등록합니다. | POST
-2. remoteCSE 생성 | remoteCSE ID와 passCode를 oneM2M서버에 등록합니다. | POST
+2. remoteCSE 생성 | 서비스 등록 및 서비스에서 발생되는 데이터를 저장하기 Resource를 생성하고, remoteCSE ID와 passCode를 oneM2M 서버에 등록합니다. | POST
 3. 컨테이너 생성 | 데이터를 저장해둘 container를 생성합니다. 파일시스템의 폴더와 같은 역할을 합니다. | POST
-4. mgmtCmd 생성 | 디바이스에서 받아들일 수 있는 제어 명령어를 생성 합니다. 이 생성된 명령어 이름은 Application이 제어 명령을 내릴 때 사용합니다. | POST
+4. mgmtCmd 생성 | 디바이스에서 받아들일 수 있는 제어 명령어를 포함하는 자원을 생성 합니다. 이 생성된 명령어 이름은 Application이 제어 명령을 내릴 때 사용합니다. | POST
 5. Content Instance 생성 | 일반적으로 센서의 측정값을 지정한 컨테이너에 기록합니다. | POST
 6. MQTT 연결 | 현재 ThingPlug는 Application에서 oneM2M에게 전달된 제어명령(mgmtCmd) execInstance를 전달받는 방법으로 MQTT를 사용할 수 있습니다.(oneM2M표준사항은 아님) ThingPlug MQTT와 연결합니다. | -
 7. execInstance 갱신 | MQTT등을 통해 전달받은 execInstance의 결과를 갱신합니다. | PUT
@@ -129,7 +130,7 @@ content : 13
 resouceId : CI00000000000000034932
 생성일 : 2015-08-16T13:01:10+09:00
 2. mgmtCmd 제어 요청
-content-location: http://61.250.21.212:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000/mgmtCmd-mgmtCmd_1/execInstance-EI00000000000000000517
+content-location: https://sandbox.sktiot.com:9000/ThingPlug/remoteCSE-000.0000.00000.0000.00000/mgmtCmd-mgmtCmd_1/execInstance-EI00000000000000000517
 resouceId : EI00000000000000000517
 execStatus : 2
 #. execInstance 리소스 조회
@@ -160,8 +161,10 @@ extra : request
 3. mgmtCmd execInstance 조회 | Device로 보낸 제어 명령의 상태를 조회 합니다. | GET
 
 ## 환영합니다. 당신은 이제 oneM2M IoT입니다.
-어떠세요? 벌써 Starter Kit을 이용하여 SK ThingPlug oneM2M기반의 IoT에 필요한 구성요소를 준비 완료했습니다. 이제 Application과 Device의 코드를 시작점으로 원하는 서비스를 만들어보세요. 서비스를 개발해 나가는 과정에서 생겨나는 궁금증은 [ThingPlug 개발자 커뮤니티](https://sandbox.sktiot.com/IoTPortal/cmmnty/cmmntyList)를 이용해주세요.
+어떠세요? 벌써 Starter Kit을 이용하여 SK ThingPlug oneM2M 기반의 IoT에 필요한 구성요소를 준비 완료했습니다. 이제 Application과 Device의 코드를 시작점으로 원하는 서비스를 만들어보세요. 서비스를 개발해 나가는 과정에서 생겨나는 궁금증은 [ThingPlug 개발자 커뮤니티](https://sandbox.sktiot.com/IoTPortal/cmmnty/cmmntyList)를 이용해주세요.
 
+##Starter Kit에 대한 상세한 내용은 ThingPlug 가이드북을 참고하세요.
+[ThingPlug로 시작하는 IoT 서비스 개발](http://book.naver.com/bookdb/book_detail.nhn?bid=9766474)를 참고하세요.
 
 ## FAQ
 #### `node application` 실행 시  mgmtCmd부분에서 `statusCode:400`에러가 발생합니다.
