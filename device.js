@@ -14,9 +14,8 @@ if(typeof optionData == 'undefined') {
 
 // Request ID를 생성하기 위한 RandomInt Function
 function randomInt (low, high) {
-	return Math.floor(Math.random() * (high - low + 1) + low);
+  return Math.floor(Math.random() * (high - low + 1) + low);
 }
-
 
 // 1. node 생성
 httpReq({
@@ -83,12 +82,13 @@ httpReq({
   }
   // MQTT Connect
   return new Promise(function(resolve, reject){
+    var msgTest;
     var mqtt = require('mqtt');
     var client  = mqtt.connect('mqtt://sandbox.sktiot.com');
 
     client.on('connect', function () {
       console.log('### mqtt connected ###');
-      client.subscribe(optionData.node_ID);
+      client.subscribe("/oneM2M/req/+/"+ optionData.node_ID);
       resolve();
     });
 
@@ -100,11 +100,11 @@ httpReq({
       // message is Buffer
       var msgs = message.toString().split(',');
       console.log(colors.red('#####################################'));
-      console.log(colors.red('MQTT 수신 mgmtCmd Name : ') + msgs[0]);
-      parseString( msgs[1], function(err, xmlObj){
+      console.log(colors.red('MQTT 수신');
+      parseString( msgs[0], function(err, xmlObj){
         if(!err){
-          console.log(colors.red('extra : ') + xmlObj['m2m:exin']['exra'][0]);
-          updateExecInstance(xmlObj['m2m:exin']['ri'][0])
+          console.log(xmlObj['m2m:req']['pc'][0]['exin'][0]['ri'][0]);
+          updateExecInstance(xmlObj['m2m:req']['pc'][0]['exin'][0]['ri'][0]);
         }
       });
       console.log(colors.red('#####################################'));
@@ -196,7 +196,7 @@ function setContentInterval(){
           'X-M2M-Origin': optionData.node_ID,
           'X-M2M-RI': randomInt(100000, 999999),
           'Content-Type': 'application/json;ty=4',
-		      dKey : optionData['dKey']
+          dKey : optionData['dKey']
         }
       },
       body : {
@@ -204,6 +204,10 @@ function setContentInterval(){
         con : value   //업로드 하는 데이터 (con == content)
       }
     }).then(function(result){
+      //console.log(result.requestArgs);
+      //console.log('#####################################');
+      //console.log(result.headers);
+      //console.log(result.data);
       var data = JSON.parse(result.data);
       console.log('content : ' + data.con + ', resourceID : '+data.ri);
     }).catch(function(err){

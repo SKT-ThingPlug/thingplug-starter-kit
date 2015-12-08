@@ -15,7 +15,7 @@ var app = express();
 
 app.get('/', function (req, res) {
 	console.log('/');
-	httpReq({ 
+	httpReq({
 	  options: {
 	    host : 'sandbox.sktiot.com',
 	    port: '9000',
@@ -71,7 +71,7 @@ app.post('/mgmtcmd_open', function(req,res){
       }
     },
 		body : {
-			exra : 'testArgument',			//제어 요청(일반적으로 원격 장치를 RPC호출)을 위한 Argument 정의 (exra == execReqArgs) 
+			exra : 'testArgument',			//제어 요청(일반적으로 원격 장치를 RPC호출)을 위한 Argument 정의 (exra == execReqArgs)
 			exe : true						//제어 요청 Trigger 속성으로 해당 속성은 (True/False로 표현) (exe == execEnabler)
 		}
   }).then(function(result){

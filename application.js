@@ -61,6 +61,7 @@ httpReq({
   });
 }).then(function(result){
   console.log(colors.green('2. mgmtCmd 제어 요청'));
+	//console.log(result);
   if(result.data){
 		var data = JSON.parse(result.data);
 		console.log('resourceID : '+data.exin[0].ri);
