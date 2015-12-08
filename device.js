@@ -100,7 +100,7 @@ httpReq({
       // message is Buffer
       var msgs = message.toString().split(',');
       console.log(colors.red('#####################################'));
-      console.log(colors.red('MQTT 수신');
+      console.log(colors.red('MQTT 수신'));
       parseString( msgs[0], function(err, xmlObj){
         if(!err){
           console.log(xmlObj['m2m:req']['pc'][0]['exin'][0]['ri'][0]);
