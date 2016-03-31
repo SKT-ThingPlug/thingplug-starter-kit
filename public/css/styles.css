@@ -1,0 +1,45 @@
+.hidden {
+    display: none;
+}
+
+.plot {
+    float: left;
+    margin-bottom: 20px;
+}
+
+.graph {
+    float: left;
+    width: 600;
+    height: 250;
+}
+
+.data {
+    float: left;
+    margin-top: 20px;
+}
+
+.title {
+    float: left;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.value {
+    float: left;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}

@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="http://d3js.org/d3.v2.js"></script>
+    <script src="./js/app.js"></script>
+    <title>ThingPlug - Smart Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <script>
+  </script>
+    <body>
+      <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <div class="logo">
+              <img alt="Brand" class="navbar-brand-logo" src="https://www.sp1.sktiot.com/asset/icon/36.png">
+            </div>
+          </div>
+          <ul class="nav navbar-nav">
+            <li><a href="http://thingplug.sktiot.com/" class="navbar-right">ThingPlug</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="container">
+        <div class="jumbotron">
+          <h2>ThingPlug Starter Kit</h2>
+          <p>ThingPlug Starter Kit을 이용한 실시간 온도 모니터링 및 에어컨 제어 예제</p>
+        </div>
+        <h1 class="page-header"> 실시간 온도 모니터링 </h1>
+        <div class="row">
+          <div class="col-sm-2"> 온도값 </div>
+          <div class="col-sm-1" id="temp_value">0</div>
+          <div class="col-sm-2"> Celcius</div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2"> 측정 시간  </div>
+          <div class="col-sm-4" id="temp_time">... </div>
+        </div>
+        <h2 class="page-header"> 에어컨 제어 </h2>
+        <div class="control-btn-group">
+          <button type="button" id="ac_on_btn" class="btn btn-primary">On</button>
+          <button type="button" id="ac_off_btn" class="btn btn-default">Off</button>
+        </div>
+        <h2 class="page-header">Sensor Graph (1 sec)</h2>
+        <div class="row">
+          <div id="graph" class="graph"></div>
+        </div>
+      </div><!-- end of container -->
+    </body>
+  </html>
