@@ -174,6 +174,11 @@ extra : request
 가상 센서를 위한 Dashboard는 http://SERVER_IP:3000/dashboard 이며, 
 가상 센서값을 Dashboard에 표시하기 위해서는 `node device.js` 를 실행하며, 가상으로 에어컨을 제어하여 온도값의 변화를 나타내는 예시입니다. 
 ### Intel Edison 보드 지원
+Intel Edison 보드 + Grove Kit 에 대한 샘플 코드를 지원합니다. example 폴더에 관련 파일이 존재합니다.
+Edison 보드 예제를 실행하기 위해서는 필요한 모듈을 추가 설치해야 합니다.
+```
+npm install johnny-five edison-io
+```
 Intel Edison 보드의 센서값을 확인하기 위한 Dashboard는 http://SERVER_IP:3000/dashboard/edison.html 입니다. Intel Edison 보드의 센서값을 Dashboard에 표시하기 위해서는 `node example/edison/device.js` 를 실행해야 합니다.  Intel Edison 보드는 Grove Kit에 버튼, LED, 조도 센서를 부착한 경우에 대한 예제이며, PIN 매핑을 `example/edison/device.js` 파일을 열어 실제 부착한 센서의 PIN 번호로 변경해야 합니다.
 Default PIN 매핑은 하기와 같습니다.
 ```
