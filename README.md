@@ -47,7 +47,10 @@ git clone https://github.com/SKT-ThingPlug/thingplug-starter-kit.git
 복사된 폴더 안을 살펴보면 다음과 같은 주요파일이 있습니다.
 
 - `device.js` : 실제 IoT Device에서 구동이 가능한 코드 입니다. Node.js로 구현되어 있어 Node.js가 실행 가능한 컴퓨터에서 실행가능하며 [BeegleBone Black](http://beagleboard.org/black) 같이 Node.js를 구동할 수 있는 IoT Device에서 직접 실행이 가능합니다.
-- `application.js` : `device.js`에서 ThingPlug로 전송한 데이터를 이용하는 주체로써 일반적으로 웹이나 앱에 해당합니다. 사용자와의 접점으로 데이터를 사용자에게 보여주거나 사용자로부터 어떠한 명령을 받아 ThingPlug 서버를 통해 실제 device를 제어하기도 합니다.
+- `application.js` : `device.js`에서 ThingPlug로 전송한 데이터를 이용하는 주체로써 사용자와의 접점으로 데이터를 사용자에게 보여주거나 사용자로부터 어떠한 명령을 받아 ThingPlug 서버를 통해 실제 device를 제어하기도 합니다.
+- `application_web.js` : Express.js를 사용한 Web API 서버로 Sample Web Application에서 호출하는 backend 서버의 역할을 합니다. `device.js`에서 ThingPlug로 전송한 데이터를 사용자에게 보여주거나 웹페이지로부터 명령을 받아 ThingPlug 서버를 통해 실제 device를 제어하기도 합니다.
+- `lib/` : ThingPlug Open API와 MQTT 채널 관리에 필요한 공통 라이브러리로서 실제 디바이스 및 애플리케이션 개발 시 참조하는 목록입니다.
+- `public/` : Sample Web Application의 html, css, javascript 등 정적 파일 목록입니다.
 - `config.js` : 개발자 인증키와 디바이스 ID등 스타터킷 실행에 앞서 필요한 환경 값을 가지고 있습니다. 각자의 상황에 맞게 수정이 필요합니다. [config.js 수정참고 섹션](https://github.com/SKT-ThingPlug/thingplug-starter-kit#configjs-수정)
 
 
@@ -69,11 +72,11 @@ CSE_ID는 디바이스를 oneM2M에서 구분하기 위해 주민번호처럼 �
 ```javascript
 module.exports = {
   uKey : 'USER_KEY_FROM_SANDBOX.SKIOT.COM', // Thingplug(https://sandbox.sktiot.com) 로그인 후, `마이페이지`에 있는 사용자 인증키
-  node_ID : '0.2.481.1.101.01000000000', // Device 구분을 위한 ID  (본 예제에서는 맨 뒷자리를 핸드폰 번호 사용 권장)
+  nodeID : '0.2.481.1.101.01000000000', // Device 구분을 위한 ID  (본 예제에서는 맨 뒷자리를 핸드폰 번호 사용 권장)
   passCode : '000101', // ThingPlug에 Device등록 시 사용할 Device의 비밀번호 (본 예제에서는 생년월일 사용 권장)
-  app_ID : 'myApplication', //Application의 구분을 위한 ID
-  container_name:'myContainer', // starter kit에서 생성하고 사용할 container 이름 (임의지정)
-  mgmtCmd_prefix : 'myMGMT', // starter kit에서 생성하고 사용할 제어 명령 이름 접두사 (임의지정)
+  appID : 'myApplication', //Application의 구분을 위한 ID
+  containerName:'myContainer', // starter kit에서 생성하고 사용할 container 이름 (임의지정)
+  mgmtCmdPrefix : 'myMGMT', // starter kit에서 생성하고 사용할 제어 명령 이름 접두사 (임의지정)
   cmdType : 'senser_1' // starter kit에서 사용할 제어 타입 (임의지정)
 };
 ```
@@ -84,17 +87,22 @@ module.exports = {
 ```
 $ node device
 ### ThingPlug Device ###
-1. node 생성 결과
+1. node 생성 요청
+node 생성 결과
 생성 node Resource ID : ND00000000000000000270
-2. remoteCES 생성 결과
+2. remoceCSE 생성 요청
+remoteCSE 생성 결과
 다비이스 키 : VGJVMDdzVFl2YTBOZFBIMGlwUDdlZksvbVF5dWExRGNHK2cyaW9zOEY4R215QTU0bW9MSmt3QlZYejJ2VGJCbg==
 content-location: /ThingPlug/remoteCSE-0.2.481.1.101.01012341234
-### mqtt connected ###
-3. container 생성 결과
+3. container 생성 요청
+container 생성 결과
 content-location: /ThingPlug/remoteCSE-0.2.481.1.101.01012341234/container-myContainer
-4. mgmtCmd 생성 결과
+4. mgmtCmd 생성 요청
+mgmtCmd 생성 결과
 content-location: /ThingPlug/mgmtCmd-myMGMT0.2.481.1.101.01012341234
 5. content Instance 주기적 생성 시작
+6. 제어 명령 수신 MQTT 연결
+### mqtt connected ###
 content : 35, resourceID : CI00000000000000710830
 content : 25, resourceID : CI00000000000000710831
 content : 18, resourceID : CI00000000000000710832
@@ -116,7 +124,7 @@ content : 18, resourceID : CI00000000000000710832
 ### ThingPlug에 내 계정에 Device를 등록
 애플리케이션에서 ThingPlug oneM2M REST API를 통해 데이터를 필요에 따라 제어명령을 보내기 위해서는 먼저 ThingPlug 사이트에 위 device(생성된 remoteCSE)를 등록해야합니다.
 
-- [ThingPlug](https://sandbox.sktiot.com) 로그인 후 "마이페이지 > 나의 디바이스 > 디바이스 등록" 페이지로 이동합니다.
+- [ThingPlug](https://thingplug.sktiot.com) 로그인 후 "마이페이지 > 나의 디바이스 > 디바이스 등록" 페이지로 이동합니다.
 - 위에서 device 실행 시 사용한 `config.js`의 디바이스 아이디(cse_ID)와 passCode를 개별등록에 입력하고 `디바이스 정보확인` 버튼을 누릅니다.
 - 필수정보 입력화면에 내용을 해당 내용을 넣어준 후 하단 '저장'버튼을 누르면 ThingPlug에 Device 등록이 완료됩니다.
 
@@ -160,6 +168,38 @@ extra : request
 2. mgmtCmd execInstance 생성 | Device로 보낼 제어 명령을 oneM2M에게 보냅니다. | POST
 3. mgmtCmd execInstance 조회 | Device로 보낸 제어 명령의 상태를 조회 합니다. | GET
 
+## Web Application 실행
+`node application_web.js` 명령어로 Express.js 서버를 실행합니다. 
+이제 웹 브라우저를 열어서 실행 중인 서버의 IP로 접속하여 Dashboard를 실행합니다.
+가상 센서를 위한 Dashboard는 http://SERVER_IP:3000/dashboard 이며, 
+가상 센서값을 Dashboard에 표시하기 위해서는 `node device.js` 를 실행하며, 가상으로 에어컨을 제어하여 온도값의 변화를 나타내는 예시입니다. 
+### Intel Edison 보드 지원
+Intel Edison 보드의 센서값을 확인하기 위한 Dashboard는 http://SERVER_IP:3000/dashboard/edison.html 입니다. Intel Edison 보드의 센서값을 Dashboard에 표시하기 위해서는 `node example/edison/device.js` 를 실행해야 합니다.  Intel Edison 보드는 Grove Kit에 버튼, LED, 조도 센서를 부착한 경우에 대한 예제이며, PIN 매핑을 `example/edison/device.js` 파일을 열어 실제 부착한 센서의 PIN 번호로 변경해야 합니다.
+Default PIN 매핑은 하기와 같습니다.
+```
+module.exports = {
+  'board' : 'edison',
+  'sensor' : [
+    {
+      'name' : 'light_1',
+      'category' : 'light',
+      'pin' : 'A0'
+    },
+    {
+      'name' : 'button_1',
+      'category' : 'button',
+      'pin' : 5
+    },
+    {
+      'name' : 'led_1',
+      'category' : 'led',
+      'pin' : 3
+    }
+  ]
+}
+```
+
+
 ## 환영합니다. 당신은 이제 oneM2M IoT입니다.
 어떠세요? 벌써 Starter Kit을 이용하여 SK ThingPlug oneM2M 기반의 IoT에 필요한 구성요소를 준비 완료했습니다. 이제 Application과 Device의 코드를 시작점으로 원하는 서비스를 만들어보세요. 서비스를 개발해 나가는 과정에서 생겨나는 궁금증은 [ThingPlug 개발자 커뮤니티](https://sandbox.sktiot.com/IoTPortal/cmmnty/cmmntyList)를 이용해주세요.
 
@@ -178,3 +218,4 @@ device먼저 실행한 후 application.js를 실행해야합니다. [config.js �
 
 #### 마이페이지에 사용자 인증키가 없는데요?
 ThingPlug 회원가입 입력양식에 있는 디바이스 연동 프로토콜 선택을 반드시 HTTP로 선택해야 합니다. 그렇지 않을 경우 oneM2M API를 이용할 수 없습니다. 가입시에만 선택이 가능하기 때문에 새로운 아이디로 새 계정을 만들고 가입 입력양식에서 꼭 HTTP로 선택해주세요.
+
