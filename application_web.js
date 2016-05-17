@@ -14,6 +14,10 @@ app.use('/dashboard', express.static(path.join(__dirname,'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.get('/config', function(req,res) {
+  res.send(config);
+});
+
 app.get('/data/:container', function(req,res) {
   var container = req.params.container;
   api.getLatestContainer(config.nodeID, container, function(err, data){

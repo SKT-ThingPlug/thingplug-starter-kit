@@ -22,6 +22,10 @@ jQuery(document).ready(function() {
   var ld = null;
   var path = null;
   var recent_ri = 0;
+  var container_name = 'myContainer';
+  getConfig( function(err,config) {
+    if(data) container_name = config.containerName;
+  });
 
   function createGraph(id) {
     color.domain('Sensor');
@@ -96,6 +100,19 @@ jQuery(document).ready(function() {
       .attr("d", function(d) { return line(d.values); })
   }
 
+  function getConfig(cb) {
+    var url = '/config';
+    $.get(url, function(data, status){
+      if(status == 'success'){
+        cb(null, data);
+      }
+      else {
+        console.log('[Error] /config API return status :'+status);
+        cb({error: status}, null);
+      }
+    });
+  }
+
   function getData(container, cb) {
     var url = '/data/' + container;
     $.get(url, function(data, status){
@@ -148,7 +165,7 @@ jQuery(document).ready(function() {
   initToastOptions();
   createGraph('#graph'); 
   setInterval(function(){
-    getData('myContainer', function(err,data){
+    getData(container_name, function(err,data){
       insertNewData(data);
     });
     displayData();
