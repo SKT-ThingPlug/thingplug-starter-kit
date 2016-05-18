@@ -1,0 +1,199 @@
+
+OID: 0.2.481.1.101.01087654321
+dKey: SU1VRWc4SjRkT1NNRmhwdEdTR3h6OERQdmlCdGdiV05oczZiblZKQ285NDJybmd4clVKVkNSQ3lLRkpnUmtGbQ==
+
+Subscribe:
+
+/oneM2M/req/+/0.2.481.1.101.01087654321
+/oneM2M/resp/0.2.481.1.101.01087654321/+
+
+
+Publish:
+
+1. Node Create
+
+Request:
+
+<m2m:req xmlns:m2m="http://www.onem2m.org/xml/protocols" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.onem2m.org/xml/protocols CDT-requestPrimitive-v1_0_0.xsd">
+
+<op>1</op>
+<to>/ThingPlug</to>
+<fr>0.2.481.1.101.01087654321</fr>
+<ty>14</ty>
+<ri>1234</ri>
+<nm>0.2.481.1.101.01087654321</nm>
+<cty>application/vnd.onem2m-prsp+xml</cty>
+
+<pc>
+<nod>
+<ni>0.2.481.1.101.01087654321</ni>
+</nod>
+</pc>
+</m2m:req>
+
+* <fr>0.2.481.1.101.01087654321</fr>, <nm>0.2.481.1.101.01087654321</nm>, <ni>0.2.481.1.101.01087654321</ni> 에 OID값 입력필요
+
+Response:
+
+<m2m:rsp xmlns:m2m="http://www.onem2m.org/xml/protocols" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.onem2m.org/xml/protocols CDT-requestPrimitive-v1_0_0.xsd">
+<ri>123459f9cfc6-f8f6-4d12-b813-d7ab6df769d5</ri><rsc>2001</rsc><cty>application/vnd.onem2m-res+xml;charset=UTF-8</cty><pc><nod><ty>14</ty>
+<ri>ND00000000000000001059</ri><rn>0.2.481.1.101.01087654321</rn><pi>ThingPlug</pi><ct>2016-05-16T16:34:24+09:00</ct><lt>2016-05-16T16:34:24+09:00</lt><lbl></lbl>
+<acpi></acpi><at></at><aa></aa><ni>0.2.481.1.101.01087654321</ni></nod></pc></m2m:rsp>
+
+* <ri>ND00000000000000001059</ri> 값 parsing 필요 -> remoteCSE Create할 때, <nl>값으로 설정필요
+
+2. remoteCSE Create
+
+Request:
+
+<m2m:req xmlns:m2m="http://www.onem2m.org/xml/protocols" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.onem2m.org/xml/protocols CDT-requestPrimitive-v1_0_0.xsd">
+
+<op>1</op>
+<to>/ThingPlug</to>
+<fr>0.2.481.1.101.01087654321</fr>
+<ty>16</ty>
+<ri>1234</ri>
+<passCode>12345</passCode>
+<cty>application/vnd.onem2m-prsp+xml</cty>
+
+<pc>
+<csr>
+<cst>3</cst>
+<csi>0.2.481.1.101.01087654321</csi>
+<poa>MQTT|0.2.481.1.101.01087654321</poa>
+<rr>true</rr>
+<nl>ND00000000000000001059</nl>
+</csr>
+</pc>
+</m2m:req>
+
+* <passCode>12345</passCode> 값 사용자 정의 필요
+* Node Create후 response의 <ri>ND00000000000000001059</ri> 값을 <nl>값으로 설정필요
+
+
+Response:
+
+<m2m:rsp xmlns:m2m="http://www.onem2m.org/xml/protocols" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.onem2m.org/xml/protocols CDT-requestPrimitive-v1_0_0.xsd">
+<ri>1234546f68a4-5956-4280-93eb-b921d2722894</ri><rsc>2001</rsc><dKey>SU1VRWc4SjRkT1NNRmhwdEdTR3h6OERQdmlCdGdiV05oczZiblZKQ285NDJybmd4clVKVkNSQ3lLRkpnUmtGbQ==</dKey>
+<cty>application/vnd.onem2m-res+xml;charset=UTF-8</cty><pc><csr><ty>16</ty>
+<ri>RC00000000000000001100</ri><rn>0.2.481.1.101.01087654321</rn><pi>ThingPlug</pi><ct>2016-05-16T16:38:55+09:00</ct><lt>2016-05-16T16:38:55+09:00</lt><lbl></lbl>
+<acpi>AP00000000000000002192</acpi><at></at><aa></aa><cst>3</cst><poa>MQTT|0.2.481.1.101.01087654321</poa><csi>0.2.481.1.101.01087654321</csi><rr>true</rr><nl>ND00000000000000001059</nl></csr></pc></m2m:rsp>
+
+* <dKey>SU1VRWc4SjRkT1NNRmhwdEdTR3h6OERQdmlCdGdiV05oczZiblZKQ285NDJybmd4clVKVkNSQ3lLRkpnUmtGbQ==</dKey> 값 parsing 필요 -> 이후 Request에 설정필요
+
+
+3. containerCreate-rc
+
+Request:
+
+<m2m:req xmlns:m2m="http://www.onem2m.org/xml/protocols" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.onem2m.org/xml/protocols CDT-requestPrimitive-v1_0_0.xsd">
+<op>1</op>
+<to>/ThingPlug/remoteCSE-0.2.481.1.101.01087654321</to> 
+<fr>0.2.481.1.101.01087654321</fr>
+<ty>3</ty>
+<ri>1234</ri>
+<nm>myContainer</nm> 
+<dKey>SU1VRWc4SjRkT1NNRmhwdEdTR3h6OERQdmlCdGdiV05oczZiblZKQ285NDJybmd4clVKVkNSQ3lLRkpnUmtGbQ==</dKey>
+<cty>application/vnd.onem2m-prsp+xml</cty>
+
+<pc>
+<cnt>
+<lbl>con</lbl>
+</cnt>
+</pc>
+</m2m:req>
+
+* <nm>myContainer</nm> 값 사용자 정의 필요
+
+
+Response:
+
+<m2m:rsp xmlns:m2m="http://www.onem2m.org/xml/protocols" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.onem2m.org/xml/protocols CDT-requestPrimitive-v1_0_0.xsd">
+<ri>123464acf7d8-b34b-424c-9211-d775bd06b10f</ri><rsc>2001</rsc><cty>application/vnd.onem2m-res+xml;charset=UTF-8</cty><pc><cnt><ty>3</ty>
+<ri>CT00000000000000002345</ri><rn>myContainer</rn><pi>RC00000000000000001100</pi><ct>2016-05-16T16:45:20+09:00</ct><lt>2016-05-16T16:45:20+09:00</lt><lbl>con</lbl><at></at><aa></aa><st>0</st>
+<cr>RC00000000000000001100</cr><cni>0</cni><cbs>0</cbs></cnt></pc></m2m:rsp>
+
+
+4. mgmtCmdCreate-rc
+
+Request:
+
+<m2m:req xmlns:m2m="http://www.onem2m.org/xml/protocols" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.onem2m.org/xml/protocols CDT-requestPrimitive-v1_0_0.xsd">
+
+<op>1</op>
+<to>/ThingPlug</to>
+<fr>0.2.481.1.101.01087654321</fr>
+<ty>12</ty>
+<ri>1234</ri>
+<nm>myMGMT0.2.481.1.101.01087654321</nm> <dKey>SU1VRWc4SjRkT1NNRmhwdEdTR3h6OERQdmlCdGdiV05oczZiblZKQ285NDJybmd4clVKVkNSQ3lLRkpnUmtGbQ==</dKey>
+<cty>application/vnd.onem2m-prsp+xml</cty>
+
+<pc>
+<mgc>
+<cmt>sensor_1</cmt> 
+<exe>false</exe>
+<ext>ND00000000000000001059</ext>
+</mgc>
+</pc>
+</m2m:req>
+
+* <nm>myMGMT0.2.481.1.101.01087654321</nm> 값 사용자 정의 필요
+* <cmt>sensor_1</cmt>  값 사용자 정의 필요
+* Node Create후 response의 <ri>ND00000000000000001059</ri> 값을 <ext>값으로 설정필요
+
+
+Response:
+
+<m2m:rsp xmlns:m2m="http://www.onem2m.org/xml/protocols" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.onem2m.org/xml/protocols CDT-requestPrimitive-v1_0_0.xsd">
+<ri>1234551fb9da-563b-481f-bfe0-1147ce883e4f</ri><rsc>2001</rsc><cty>application/vnd.onem2m-res+xml;charset=UTF-8</cty><pc><mgc><ty>12</ty>
+<ri>MC00000000000000002313</ri><rn>myMGMT0.2.481.1.101.01087654321</rn><pi>ThingPlug</pi><ct>2016-05-16T17:14:56+09:00</ct><lt>2016-05-16T17:14:56+09:00</lt><lbl></lbl>
+<cmt>sensor_1</cmt><exe>false</exe><ext>ND00000000000000001059</ext></mgc></pc></m2m:rsp>
+
+
+5. contentInstanceCreate-rc
+
+Request:
+
+<m2m:req xmlns:m2m="http://www.onem2m.org/xml/protocols" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.onem2m.org/xml/protocols CDT-requestPrimitive-v1_0_0.xsd">
+
+<op>1</op>
+<to>/ThingPlug/remoteCSE-0.2.481.1.101.01087654321/container-myContainer</to>
+<fr>0.2.481.1.101.01087654321</fr>
+<ty>4</ty>
+<ri>1234</ri>
+<cty>application/vnd.onem2m-prsp+xml</cty> <dKey>SU1VRWc4SjRkT1NNRmhwdEdTR3h6OERQdmlCdGdiV05oczZiblZKQ285NDJybmd4clVKVkNSQ3lLRkpnUmtGbQ==</dKey>
+
+
+<pc>
+<cin>
+<cnf>text</cnf>
+<con>45</con>
+</cin>
+</pc>
+
+</m2m:req>
+
+* <to>/ThingPlug/remoteCSE-0.2.481.1.101.01087654321/container-myContainer</to> 의 container 이름 값 설정필요
+* <cnf>text</cnf>, <con>45</con> 값들 사용자 정의 필요
+
+
+Response:
+
+<m2m:rsp xmlns:m2m="http://www.onem2m.org/xml/protocols" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.onem2m.org/xml/protocols CDT-requestPrimitive-v1_0_0.xsd">
+<ri>1234fa899fd3-462d-43a5-8755-392adb834bb2</ri><rsc>2001</rsc><cty>application/vnd.onem2m-res+xml;charset=UTF-8</cty><pc><cin><ty>4</ty>
+<ri>CI00000000000032409858</ri><rn>CI00000000000032409858</rn><pi>CT00000000000000002345</pi><ct>2016-05-16T16:54:00+09:00</ct><lt>2016-05-16T16:54:00+09:00</lt><lbl></lbl>
+<et>2016-06-16T01:00:00+09:00</et><at></at><aa></aa><st>1</st><cr>RC00000000000000001100</cr><cnf>text</cnf><cs>2</cs><con>45</con></cin></pc></m2m:rsp>
+
+
+
+6. Application에서 mgmtCmd 요청 시
+
+Response:
+
+<m2m:req xmlns:m2m="http://www.onem2m.org/xml/protocols" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.onem2m.org/xml/protocols CDT-requestPrimitive-v1_0_0.xsd">
+<op>1</op><cty>application/vnd.onem2m-prsp+xml;charset=UTF-8</cty>
+<nm>myMGMT0.2.481.1.101.01087654321</nm><fr>ThingPlug</fr><pc><exin><ty>8</ty><ri>EI00000000000000050377</ri><rn>EI00000000000000050377</rn><pi>MC00000000000000002313</pi>
+<ct>2016-05-16T17:15:39+09:00</ct><lt>2016-05-16T17:15:39+09:00</lt><lbl></lbl><et>2016-06-16T01:00:00+09:00</et><exs>1</exs><ext>ND00000000000000001059</ext>
+<exra>{"cmd":"open"}</exra><cmt>sensor_1</cmt></exin></pc></m2m:req>
+
+* <exra>{"cmd":"open"}</exra> 에서 {"cmd":"open"} parsing해서 LED 제어필요
