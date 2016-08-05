@@ -12,6 +12,10 @@
     "thingplug",
     "oneM2M"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SKT-ThingPlug/thingplug-starter-kit.git"
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
