@@ -4,7 +4,8 @@
   "description": "SKT의 ThingPlug Starter Kit",
   "scripts": {
     "device": "node device.js",
-    "app": "node application.js"
+    "app": "node application_web.js"
+
   },
   "keywords": [
     "skt",
@@ -12,10 +13,6 @@
     "thingplug",
     "oneM2M"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/SKT-ThingPlug/thingplug-starter-kit.git"
-  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
@@ -28,7 +25,9 @@
     "express": "^4.2.1",
     "body-parser": "latest",
     "async": "latest",
-    "underscore": "latest"
+    "underscore": "latest",
+	"nodemailer" : "latest",
+	"es6-promise" : "latest"
   },
   "engines": {
     "node": ">=0.10.x"
