@@ -7,9 +7,9 @@ const api = require('./lib/api');
 var device = new MQTTClient(config);
 device.on('connect', function(){
   console.log('ThingPlug MQTT Connected');
-	device.on('command', function(topic,message){
-		console.log('recv cmd :' + topic +':'+ message);
-	});
+  device.on('command', function(topic,message){
+    console.log('recv cmd :' + topic +':'+ message);
+  });
   initialSetup(function(err,result){
     if(err) {
       console.log(err);
@@ -24,7 +24,6 @@ device.on('connect', function(){
         else console.log(result);
       });
     },1000);
-
   });
 })
 
