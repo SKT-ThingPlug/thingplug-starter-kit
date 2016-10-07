@@ -10,7 +10,11 @@ var config = require('./config');
 var api = require('./lib/api');
 
 async.waterfall([
-  function (cb){
+  function (cb) {
+    api.createNode(config.nodeID, cb);
+  },
+  function (nodeRI, cb){
+    config.nodeRI = nodeRI;
     api.getLatestContainer(config.nodeID, config.containerName, cb);
   },
   function(data, cb){
@@ -18,14 +22,15 @@ async.waterfall([
     console.log('resouceId : ' + data.ri);
     console.log('생성일 : '+ data.ct);
     var cmd = JSON.stringify({'cmd':'open'});
-    api.reqMgmtCmd(config.nodeID, config.mgmtCmdPrefix, cmd, cb);
+    api.reqMgmtCmd(config.nodeRI, config.command, cmd, cb);
   }
 ], function(err,resourceID){
   if(err){
     return console.log(err);
   }
+  console.log('resourceID: '+resourceID);
   setInterval( function(){
-    api.getMgmtResults(config.nodeID, config.mgmtCmdPrefix, resourceID, function(err,data){
+    api.getMgmtResults(config.nodeID, config.command, resourceID, function(err,data){
       if(err) return console.log(err);
       console.log('resourceId : ' + data.ri);
       console.log('execStatus : ' + data.exs);
