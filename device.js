@@ -55,6 +55,6 @@ function initialSetup(cb) {
 
 function processCMD(cmd) {
   var cmd_args = JSON.parse(cmd.exra[0])['cmd'];
-  if(cmd_args == 'open') return BASE_TMP = 0;
-  if(cmd_args == 'close') return BASE_TMP = 30;
+  if(cmd_args == 'on') return BASE_TMP = 0;
+  if(cmd_args == 'off') return BASE_TMP = 30;
 }

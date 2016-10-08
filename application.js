@@ -21,7 +21,7 @@ async.waterfall([
     console.log('content : ' + data.con);
     console.log('resouceId : ' + data.ri);
     console.log('createdAt : '+ data.ct);
-    var cmd = JSON.stringify({'cmd':'open'});
+    var cmd = JSON.stringify({'cmd':'on'});
     api.reqMgmtCmd(config.nodeRI, config.command, cmd, cb);
   }
 ], function(err,resourceID){
