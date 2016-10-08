@@ -20,20 +20,27 @@ async.waterfall([
   function(data, cb){
     console.log('content : ' + data.con);
     console.log('resouceId : ' + data.ri);
-    console.log('생성일 : '+ data.ct);
+    console.log('createdAt : '+ data.ct);
     var cmd = JSON.stringify({'cmd':'open'});
     api.reqMgmtCmd(config.nodeRI, config.command, cmd, cb);
   }
 ], function(err,resourceID){
-  if(err){
-    return console.log(err);
-  }
+  if(err) return console.log(err);
   console.log('resourceID: '+resourceID);
-  setInterval( function(){
+  var interval = setInterval( function(){
     api.getMgmtResults(config.nodeID, config.command, resourceID, function(err,data){
-      if(err) return console.log(err);
+      if(err) {
+        if (err.statusCode === 400){
+          return console.log('wait until the device responds');
+        }
+        else{
+          clearInterval(interval);
+          return console.log(err);
+        }
+      }
       console.log('resourceId : ' + data.ri);
       console.log('execStatus : ' + data.exs);
+      clearInterval(interval);
     });
   },1000);
 });
