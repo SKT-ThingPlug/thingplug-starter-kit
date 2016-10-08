@@ -21,26 +21,10 @@ async.waterfall([
     console.log('content : ' + data.con);
     console.log('resouceId : ' + data.ri);
     console.log('createdAt : '+ data.ct);
-    var cmd = JSON.stringify({'cmd':'open'});
+    var cmd = JSON.stringify({'cmd':'on'});
     api.reqMgmtCmd(config.nodeRI, config.command, cmd, cb);
   }
 ], function(err,resourceID){
   if(err) return console.log(err);
   console.log('resourceID: '+resourceID);
-  var interval = setInterval( function(){
-    api.getMgmtResults(config.nodeID, config.command, resourceID, function(err,data){
-      if(err) {
-        if (err.statusCode === 400){
-          return console.log('wait until the device responds');
-        }
-        else{
-          clearInterval(interval);
-          return console.log(err);
-        }
-      }
-      console.log('resourceId : ' + data.ri);
-      console.log('execStatus : ' + data.exs);
-      clearInterval(interval);
-    });
-  },1000);
 });
