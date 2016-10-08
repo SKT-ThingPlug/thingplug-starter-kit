@@ -14,6 +14,10 @@ app.use('/dashboard', express.static(path.join(__dirname,'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.get('/', function(req,res){
+  res.redirect('/dashboard');
+});
+
 app.get('/config', function(req,res) {
   res.send(config);
 });
@@ -37,4 +41,5 @@ app.post('/control', function(req,res) {
 var server = http.createServer(app);
 server.listen(app.get('port'), function(){
   console.log('Express server for sample dashboard listening on port:'+ app.get('port'));
+  console.log('Open the link : http://localhost:'+app.get('port'));
 });

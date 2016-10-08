@@ -27,20 +27,4 @@ async.waterfall([
 ], function(err,resourceID){
   if(err) return console.log(err);
   console.log('resourceID: '+resourceID);
-  var interval = setInterval( function(){
-    api.getMgmtResults(config.nodeID, config.command, resourceID, function(err,data){
-      if(err) {
-        if (err.statusCode === 400){
-          return console.log('wait until the device responds');
-        }
-        else{
-          clearInterval(interval);
-          return console.log(err);
-        }
-      }
-      console.log('resourceId : ' + data.ri);
-      console.log('execStatus : ' + data.exs);
-      clearInterval(interval);
-    });
-  },1000);
 });

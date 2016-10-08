@@ -2,12 +2,17 @@ const async = require('async');
 const MQTTClient = require('./lib/mqtt_client');
 const config = require('./config');
 const colors = require('colors');
+const util = require('util');
+const INTERVAL = 1000;
 
+var BASE_TMP = 30;
 var device = new MQTTClient(config);
 device.on('connect', function(){
   console.log('ThingPlug MQTT Connected');
-  device.on('command', function(topic,message){
-    console.log('recv cmd :' + topic +':'+ message);
+  device.on('command', function(topic,cmd){
+    console.log('recv cmd :' + topic +':'+ cmd.exra[0]);
+    processCMD(cmd);
+    device.updateExecInstance(cmd.cmt[0], cmd.ri[0], function(err,result){});
   });
   initialSetup(function(err,result){
     if(err) {
@@ -16,12 +21,12 @@ device.on('connect', function(){
     }
     console.log(colors.green('5. content Instance 주기적 생성 시작'));
     setInterval( function(){
-      var value = Math.floor(Math.random() * 5);
+      var value = BASE_TMP + Math.floor(Math.random() * 5);
       device.createContentInstance(config.containerName, value, function(err, result){
         if(err) console.log(err)
-        else console.log(result);
+        else console.log(value, result);
       });
-    },1000);
+    },INTERVAL);
   });
 })
 
@@ -48,4 +53,8 @@ function initialSetup(cb) {
   });
 }
 
-//device.end();
+function processCMD(cmd) {
+  var cmd_args = JSON.parse(cmd.exra[0])['cmd'];
+  if(cmd_args == 'open') return BASE_TMP = 0;
+  if(cmd_args == 'close') return BASE_TMP = 30;
+}
