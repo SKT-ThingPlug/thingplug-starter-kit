@@ -1,6 +1,6 @@
 const async = require('async');
-const MQTTClient = require('./lib/mqtt_client');
-const config = require('./config');
+const MQTTClient = require('../../lib/mqtt_client');
+const config = require('../../config');
 const colors = require('colors');
 const util = require('util');
 
@@ -28,6 +28,7 @@ device.on('connect', function(){
         if(data.value){
           var containerName = data.source;
           var value = parseInt(data.value);
+          console.log(value);
           device.createContentInstance(containerName, value, function(err, result){});
         }
       });
@@ -37,6 +38,7 @@ device.on('connect', function(){
         if(data.value){
           var containerName = data.source;
           var value = data.value;
+          console.log(value);
           device.createContentInstance(.containerName, value, function(err, result){});
         }
       });
