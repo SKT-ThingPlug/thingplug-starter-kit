@@ -39,7 +39,7 @@ device.on('connect', function(){
           var containerName = data.source;
           var value = data.value;
           console.log(value);
-          device.createContentInstance(.containerName, value, function(err, result){});
+          device.createContentInstance(containerName, value, function(err, result){});
         }
       });
     });
