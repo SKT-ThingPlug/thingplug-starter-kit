@@ -151,7 +151,7 @@ execStatus : 3
 
 ```
 #####################################
-MQTT 수신 mgmtCmd Name : mgmtCmd_1
+MQTT 수신 mgmtCmd :/oneM2M/req_msg/AppEUI/ClientId:제어명령
 extra : request
 #####################################
 #####################################

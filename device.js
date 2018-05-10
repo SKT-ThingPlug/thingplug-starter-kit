@@ -10,9 +10,16 @@ var device = new MQTTClient(config);
 device.on('connect', function(){
   console.log('ThingPlug MQTT Connected');
   device.on('command', function(topic,cmd){
-    console.log('recv cmd :' + topic +':'+ cmd.exra[0]);
+    console.log("#####################################");
+    console.log('MQTT 수신 mgmtCmd :' + topic +':'+ cmd.exra[0]);
     processCMD(cmd);
     device.updateExecInstance(cmd.cmt[0], cmd.ri[0], function(err,result){});
+
+    console.log("#####################################");
+    console.log("#####################################");
+    console.log('처리한 resouceId :' + cmd.ri[0]);
+    console.log('처리한 결과 execStatus : 3');
+    console.log("#####################################");
   });
   initialSetup(function(err,result){
     if(err) {
